@@ -1,0 +1,1322 @@
+[
+  {
+    "name": "OIA",
+    "website": "https://oia.gov.om",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://oia.gov.om/favicon.ico"
+  },
+  {
+    "name": "MUBADALA",
+    "website": "https://www.mubadala.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.mubadala.com/favicon.ico"
+  },
+  {
+    "name": "ADQ",
+    "website": "https://www.adq.ae",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.adq.ae/favicon.ico"
+  },
+  {
+    "name": "PIF",
+    "website": "https://www.pif.gov.sa",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.pif.gov.sa/favicon.ico"
+  },
+  {
+    "name": "QIA",
+    "website": "https://www.qia.qa",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.qia.qa/favicon.ico"
+  },
+  {
+    "name": "KIA",
+    "website": "https://www.kia.gov.kw",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.kia.gov.kw/favicon.ico"
+  },
+  {
+    "name": "MUMTALAKAT",
+    "website": "https://www.mumtalakat.bh",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.mumtalakat.bh/favicon.ico"
+  },
+  {
+    "name": "TEMASEK",
+    "website": "https://www.temasek.com.sg",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.temasek.com.sg/favicon.ico"
+  },
+  {
+    "name": "GIC",
+    "website": "https://www.gic.com.sg",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.gic.com.sg/favicon.ico"
+  },
+  {
+    "name": "CHINA INV",
+    "website": "https://china-inv.cn",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://china-inv.cn/favicon.ico"
+  },
+  {
+    "name": "HKINVESTMENTCORP",
+    "website": "https://www.hkinvestmentcorp.gov.hk",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.hkinvestmentcorp.gov.hk/favicon.ico"
+  },
+  {
+    "name": "KHAZANAH",
+    "website": "https://www.khazanah.com.my",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.khazanah.com.my/favicon.ico"
+  },
+  {
+    "name": "ADIA",
+    "website": "https://www.adia.ae",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.adia.ae/favicon.ico"
+  },
+  {
+    "name": "BLACKROCK",
+    "website": "https://www.blackrock.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.blackrock.com/favicon.ico"
+  },
+  {
+    "name": "ARAMCO",
+    "website": "https://www.aramco.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.aramco.com/favicon.ico"
+  },
+  {
+    "name": "ADNOC",
+    "website": "https://www.adnoc.ae",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.adnoc.ae/favicon.ico"
+  },
+  {
+    "name": "OQ",
+    "website": "https://oq.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://oq.com/favicon.ico"
+  },
+  {
+    "name": "QATARENERGY",
+    "website": "https://www.qatarenergy.qa",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.qatarenergy.qa/favicon.ico"
+  },
+  {
+    "name": "ACWAPOWER",
+    "website": "https://www.acwapower.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.acwapower.com/favicon.ico"
+  },
+  {
+    "name": "MASDAR",
+    "website": "https://masdar.ae",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://masdar.ae/favicon.ico"
+  },
+  {
+    "name": "SHELL",
+    "website": "https://www.shell.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.shell.com/favicon.ico"
+  },
+  {
+    "name": "BP",
+    "website": "https://www.bp.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bp.com/favicon.ico"
+  },
+  {
+    "name": "TOTALENERGIES",
+    "website": "https://totalenergies.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://totalenergies.com/favicon.ico"
+  },
+  {
+    "name": "EXXONMOBIL",
+    "website": "https://corporate.exxonmobil.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://corporate.exxonmobil.com/favicon.ico"
+  },
+  {
+    "name": "CHEVRON",
+    "website": "https://www.chevron.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.chevron.com/favicon.ico"
+  },
+  {
+    "name": "EQUINOR",
+    "website": "https://www.equinor.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.equinor.com/favicon.ico"
+  },
+  {
+    "name": "ENI",
+    "website": "https://www.eni.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.eni.com/favicon.ico"
+  },
+  {
+    "name": "PETROBRAS",
+    "website": "https://petrobras.com.br",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://petrobras.com.br/favicon.ico"
+  },
+  {
+    "name": "SINOPECCOM",
+    "website": "https://www.sinopecgroup.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.sinopecgroup.com/favicon.ico"
+  },
+  {
+    "name": "PETROCHINA",
+    "website": "https://www.petrochina.com.cn",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.petrochina.com.cn/favicon.ico"
+  },
+  {
+    "name": "CNPC",
+    "website": "https://www.cnpc.com.cn",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.cnpc.com.cn/favicon.ico"
+  },
+  {
+    "name": "SIEMENS ENERGY",
+    "website": "https://www.siemens-energy.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.siemens-energy.com/favicon.ico"
+  },
+  {
+    "name": "IBERDROLA",
+    "website": "https://www.iberdrola.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.iberdrola.com/favicon.ico"
+  },
+  {
+    "name": "ORSTED",
+    "website": "https://orsted.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://orsted.com/favicon.ico"
+  },
+  {
+    "name": "MICROSOFT",
+    "website": "https://www.microsoft.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.microsoft.com/favicon.ico"
+  },
+  {
+    "name": "GOOGLE",
+    "website": "https://www.google.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.google.com/favicon.ico"
+  },
+  {
+    "name": "NVIDIA",
+    "website": "https://www.nvidia.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.nvidia.com/favicon.ico"
+  },
+  {
+    "name": "ORACLE",
+    "website": "https://www.oracle.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.oracle.com/favicon.ico"
+  },
+  {
+    "name": "AMAZON",
+    "website": "https://www.amazon.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.amazon.com/favicon.ico"
+  },
+  {
+    "name": "IBM",
+    "website": "https://www.ibm.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.ibm.com/favicon.ico"
+  },
+  {
+    "name": "CISCO",
+    "website": "https://www.cisco.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.cisco.com/favicon.ico"
+  },
+  {
+    "name": "OPENAI",
+    "website": "https://openai.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://openai.com/favicon.ico"
+  },
+  {
+    "name": "ANTHROPIC",
+    "website": "https://www.anthropic.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.anthropic.com/favicon.ico"
+  },
+  {
+    "name": "HUAWEI",
+    "website": "https://www.huawei.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.huawei.com/favicon.ico"
+  },
+  {
+    "name": "ALIBABACOM",
+    "website": "https://www.alibabagroup.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.alibabagroup.com/favicon.ico"
+  },
+  {
+    "name": "TENCENT",
+    "website": "https://www.tencent.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.tencent.com/favicon.ico"
+  },
+  {
+    "name": "BYTEDANCE",
+    "website": "https://www.bytedance.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bytedance.com/favicon.ico"
+  },
+  {
+    "name": "MI",
+    "website": "https://www.mi.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.mi.com/favicon.ico"
+  },
+  {
+    "name": "LENOVO",
+    "website": "https://www.lenovo.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.lenovo.com/favicon.ico"
+  },
+  {
+    "name": "SAMSUNG",
+    "website": "https://www.samsung.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.samsung.com/favicon.ico"
+  },
+  {
+    "name": "SAP",
+    "website": "https://www.sap.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.sap.com/favicon.ico"
+  },
+  {
+    "name": "SALESFORCE",
+    "website": "https://www.salesforce.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.salesforce.com/favicon.ico"
+  },
+  {
+    "name": "ADOBE",
+    "website": "https://www.adobe.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.adobe.com/favicon.ico"
+  },
+  {
+    "name": "DELL",
+    "website": "https://www.dell.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.dell.com/favicon.ico"
+  },
+  {
+    "name": "HSBC",
+    "website": "https://www.hsbc.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.hsbc.com/favicon.ico"
+  },
+  {
+    "name": "SC",
+    "website": "https://www.sc.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.sc.com/favicon.ico"
+  },
+  {
+    "name": "JPMORGANCHASE",
+    "website": "https://www.jpmorganchase.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.jpmorganchase.com/favicon.ico"
+  },
+  {
+    "name": "GOLDMANSACHS",
+    "website": "https://www.goldmansachs.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.goldmansachs.com/favicon.ico"
+  },
+  {
+    "name": "MORGANSTANLEY",
+    "website": "https://www.morganstanley.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.morganstanley.com/favicon.ico"
+  },
+  {
+    "name": "BANKOFAMERICA",
+    "website": "https://www.bankofamerica.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bankofamerica.com/favicon.ico"
+  },
+  {
+    "name": "CITICOM",
+    "website": "https://www.citigroup.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.citigroup.com/favicon.ico"
+  },
+  {
+    "name": "BNPPARIBAS",
+    "website": "https://group.bnpparibas",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://group.bnpparibas/favicon.ico"
+  },
+  {
+    "name": "UBS",
+    "website": "https://www.ubs.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.ubs.com/favicon.ico"
+  },
+  {
+    "name": "DB",
+    "website": "https://www.db.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.db.com/favicon.ico"
+  },
+  {
+    "name": "HOME",
+    "website": "https://home.barclays",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://home.barclays/favicon.ico"
+  },
+  {
+    "name": "BANKFAB",
+    "website": "https://www.bankfab.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bankfab.com/favicon.ico"
+  },
+  {
+    "name": "EMIRATESNBD",
+    "website": "https://www.emiratesnbd.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.emiratesnbd.com/favicon.ico"
+  },
+  {
+    "name": "QNB",
+    "website": "https://www.qnb.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.qnb.com/favicon.ico"
+  },
+  {
+    "name": "BANKMUSCAT",
+    "website": "https://www.bankmuscat.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bankmuscat.com/favicon.ico"
+  },
+  {
+    "name": "RIYADBANK",
+    "website": "https://www.riyadbank.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.riyadbank.com/favicon.ico"
+  },
+  {
+    "name": "MUFG",
+    "website": "https://www.mufg.jp",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.mufg.jp/favicon.ico"
+  },
+  {
+    "name": "ICBC LTD",
+    "website": "https://www.icbc-ltd.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.icbc-ltd.com/favicon.ico"
+  },
+  {
+    "name": "RIOTINTO",
+    "website": "https://www.riotinto.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.riotinto.com/favicon.ico"
+  },
+  {
+    "name": "BHP",
+    "website": "https://www.bhp.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bhp.com/favicon.ico"
+  },
+  {
+    "name": "VALE",
+    "website": "https://vale.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://vale.com/favicon.ico"
+  },
+  {
+    "name": "GLENCORE",
+    "website": "https://www.glencore.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.glencore.com/favicon.ico"
+  },
+  {
+    "name": "MAADEN",
+    "website": "https://www.maaden.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.maaden.com/favicon.ico"
+  },
+  {
+    "name": "ANGLOAMERICAN",
+    "website": "https://www.angloamerican.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.angloamerican.com/favicon.ico"
+  },
+  {
+    "name": "ARCELORMITTAL",
+    "website": "https://corporate.arcelormittal.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://corporate.arcelormittal.com/favicon.ico"
+  },
+  {
+    "name": "FCX",
+    "website": "https://www.fcx.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.fcx.com/favicon.ico"
+  },
+  {
+    "name": "BARRICK",
+    "website": "https://www.barrick.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.barrick.com/favicon.ico"
+  },
+  {
+    "name": "NEWMONT",
+    "website": "https://www.newmont.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.newmont.com/favicon.ico"
+  },
+  {
+    "name": "ZIJINMINING",
+    "website": "https://www.zijinmining.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.zijinmining.com/favicon.ico"
+  },
+  {
+    "name": "MINMETALS",
+    "website": "https://www.minmetals.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.minmetals.com/favicon.ico"
+  },
+  {
+    "name": "NGMK",
+    "website": "https://www.ngmk.uz",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.ngmk.uz/favicon.ico"
+  },
+  {
+    "name": "VEDANTARESOURCES",
+    "website": "https://www.vedantaresources.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.vedantaresources.com/favicon.ico"
+  },
+  {
+    "name": "TATASTEEL",
+    "website": "https://www.tatasteel.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.tatasteel.com/favicon.ico"
+  },
+  {
+    "name": "POSCO",
+    "website": "https://www.posco.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.posco.com/favicon.ico"
+  },
+  {
+    "name": "MMC",
+    "website": "https://www.mmc.co.jp",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.mmc.co.jp/favicon.ico"
+  },
+  {
+    "name": "AURUBIS",
+    "website": "https://www.aurubis.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.aurubis.com/favicon.ico"
+  },
+  {
+    "name": "HYDRO",
+    "website": "https://www.hydro.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.hydro.com/favicon.ico"
+  },
+  {
+    "name": "ALCOA",
+    "website": "https://www.alcoa.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.alcoa.com/favicon.ico"
+  },
+  {
+    "name": "DPWORLD",
+    "website": "https://www.dpworld.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.dpworld.com/favicon.ico"
+  },
+  {
+    "name": "MAERSK",
+    "website": "https://www.maersk.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.maersk.com/favicon.ico"
+  },
+  {
+    "name": "MSC",
+    "website": "https://www.msc.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.msc.com/favicon.ico"
+  },
+  {
+    "name": "COSCOSHIPPING",
+    "website": "https://www.coscoshipping.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.coscoshipping.com/favicon.ico"
+  },
+  {
+    "name": "CMACGM COM",
+    "website": "https://www.cmacgm-group.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.cmacgm-group.com/favicon.ico"
+  },
+  {
+    "name": "DHL",
+    "website": "https://group.dhl.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://group.dhl.com/favicon.ico"
+  },
+  {
+    "name": "FEDEX",
+    "website": "https://www.fedex.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.fedex.com/favicon.ico"
+  },
+  {
+    "name": "UPS",
+    "website": "https://www.ups.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.ups.com/favicon.ico"
+  },
+  {
+    "name": "HOME",
+    "website": "https://home.kuehne-nagel.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://home.kuehne-nagel.com/favicon.ico"
+  },
+  {
+    "name": "APMTERMINALS",
+    "website": "https://www.apmterminals.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.apmterminals.com/favicon.ico"
+  },
+  {
+    "name": "ASYAD",
+    "website": "https://www.asyad.om",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.asyad.om/favicon.ico"
+  },
+  {
+    "name": "ADPORTSCOM",
+    "website": "https://www.adportsgroup.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.adportsgroup.com/favicon.ico"
+  },
+  {
+    "name": "PORTOFROTTERDAM",
+    "website": "https://www.portofrotterdam.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.portofrotterdam.com/favicon.ico"
+  },
+  {
+    "name": "QATARAIRWAYS",
+    "website": "https://www.qatarairways.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.qatarairways.com/favicon.ico"
+  },
+  {
+    "name": "EMIRATES",
+    "website": "https://www.emirates.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.emirates.com/favicon.ico"
+  },
+  {
+    "name": "ETIHAD",
+    "website": "https://www.etihad.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.etihad.com/favicon.ico"
+  },
+  {
+    "name": "TURKISHAIRLINES",
+    "website": "https://www.turkishairlines.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.turkishairlines.com/favicon.ico"
+  },
+  {
+    "name": "SINGAPOREAIR",
+    "website": "https://www.singaporeair.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.singaporeair.com/favicon.ico"
+  },
+  {
+    "name": "GLOBAL",
+    "website": "https://global.toyota",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://global.toyota/favicon.ico"
+  },
+  {
+    "name": "BYD",
+    "website": "https://www.byd.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.byd.com/favicon.ico"
+  },
+  {
+    "name": "VOLKSWAGEN COM",
+    "website": "https://www.volkswagen-group.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.volkswagen-group.com/favicon.ico"
+  },
+  {
+    "name": "MERCEDES BENZ",
+    "website": "https://group.mercedes-benz.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://group.mercedes-benz.com/favicon.ico"
+  },
+  {
+    "name": "BMWCOM",
+    "website": "https://www.bmwgroup.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bmwgroup.com/favicon.ico"
+  },
+  {
+    "name": "HYUNDAI",
+    "website": "https://www.hyundai.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.hyundai.com/favicon.ico"
+  },
+  {
+    "name": "KIA",
+    "website": "https://www.kia.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.kia.com/favicon.ico"
+  },
+  {
+    "name": "TESLA",
+    "website": "https://www.tesla.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.tesla.com/favicon.ico"
+  },
+  {
+    "name": "VOLVOCOM",
+    "website": "https://www.volvogroup.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.volvogroup.com/favicon.ico"
+  },
+  {
+    "name": "CATERPILLAR",
+    "website": "https://www.caterpillar.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.caterpillar.com/favicon.ico"
+  },
+  {
+    "name": "DEERE",
+    "website": "https://www.deere.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.deere.com/favicon.ico"
+  },
+  {
+    "name": "MHI",
+    "website": "https://www.mhi.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.mhi.com/favicon.ico"
+  },
+  {
+    "name": "HITACHI",
+    "website": "https://www.hitachi.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.hitachi.com/favicon.ico"
+  },
+  {
+    "name": "BOSCH",
+    "website": "https://www.bosch.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bosch.com/favicon.ico"
+  },
+  {
+    "name": "SIEMENS",
+    "website": "https://www.siemens.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.siemens.com/favicon.ico"
+  },
+  {
+    "name": "GEAEROSPACE",
+    "website": "https://www.geaerospace.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.geaerospace.com/favicon.ico"
+  },
+  {
+    "name": "GLOBAL",
+    "website": "https://global.abb",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://global.abb/favicon.ico"
+  },
+  {
+    "name": "SE",
+    "website": "https://www.se.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.se.com/favicon.ico"
+  },
+  {
+    "name": "KOMATSU",
+    "website": "https://www.komatsu.jp",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.komatsu.jp/favicon.ico"
+  },
+  {
+    "name": "TATAMOTORS",
+    "website": "https://www.tatamotors.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.tatamotors.com/favicon.ico"
+  },
+  {
+    "name": "BECHTEL",
+    "website": "https://www.bechtel.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bechtel.com/favicon.ico"
+  },
+  {
+    "name": "AECOM",
+    "website": "https://aecom.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://aecom.com/favicon.ico"
+  },
+  {
+    "name": "CSCEC",
+    "website": "https://www.cscec.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.cscec.com/favicon.ico"
+  },
+  {
+    "name": "SAMSUNGCNT",
+    "website": "https://www.samsungcnt.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.samsungcnt.com/favicon.ico"
+  },
+  {
+    "name": "LARSENTOUBRO",
+    "website": "https://www.larsentoubro.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.larsentoubro.com/favicon.ico"
+  },
+  {
+    "name": "EMAAR",
+    "website": "https://www.emaar.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.emaar.com/favicon.ico"
+  },
+  {
+    "name": "DUBAIHOLDING",
+    "website": "https://www.dubaiholding.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.dubaiholding.com/favicon.ico"
+  },
+  {
+    "name": "NEOM",
+    "website": "https://www.neom.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.neom.com/favicon.ico"
+  },
+  {
+    "name": "REDSEAGLOBAL",
+    "website": "https://www.redseaglobal.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.redseaglobal.com/favicon.ico"
+  },
+  {
+    "name": "QIDDIYA",
+    "website": "https://qiddiya.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://qiddiya.com/favicon.ico"
+  },
+  {
+    "name": "NAKHEEL",
+    "website": "https://www.nakheel.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.nakheel.com/favicon.ico"
+  },
+  {
+    "name": "DAMACPROPERTIES",
+    "website": "https://www.damacproperties.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.damacproperties.com/favicon.ico"
+  },
+  {
+    "name": "BROOKFIELD",
+    "website": "https://www.brookfield.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.brookfield.com/favicon.ico"
+  },
+  {
+    "name": "BLACKSTONE",
+    "website": "https://www.blackstone.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.blackstone.com/favicon.ico"
+  },
+  {
+    "name": "KKR",
+    "website": "https://www.kkr.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.kkr.com/favicon.ico"
+  },
+  {
+    "name": "CARLYLE",
+    "website": "https://www.carlyle.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.carlyle.com/favicon.ico"
+  },
+  {
+    "name": "APOLLO",
+    "website": "https://www.apollo.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.apollo.com/favicon.ico"
+  },
+  {
+    "name": "TURNERCONSTRUCTION",
+    "website": "https://www.turnerconstruction.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.turnerconstruction.com/favicon.ico"
+  },
+  {
+    "name": "VINCI",
+    "website": "https://www.vinci.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.vinci.com/favicon.ico"
+  },
+  {
+    "name": "BOUYGUES",
+    "website": "https://www.bouygues.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bouygues.com/favicon.ico"
+  },
+  {
+    "name": "PFIZER",
+    "website": "https://www.pfizer.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.pfizer.com/favicon.ico"
+  },
+  {
+    "name": "JNJ",
+    "website": "https://www.jnj.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.jnj.com/favicon.ico"
+  },
+  {
+    "name": "ROCHE",
+    "website": "https://www.roche.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.roche.com/favicon.ico"
+  },
+  {
+    "name": "NOVARTIS",
+    "website": "https://www.novartis.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.novartis.com/favicon.ico"
+  },
+  {
+    "name": "ASTRAZENECA",
+    "website": "https://www.astrazeneca.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.astrazeneca.com/favicon.ico"
+  },
+  {
+    "name": "SANOFI",
+    "website": "https://www.sanofi.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.sanofi.com/favicon.ico"
+  },
+  {
+    "name": "SIEMENS HEALTHINEERS",
+    "website": "https://www.siemens-healthineers.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.siemens-healthineers.com/favicon.ico"
+  },
+  {
+    "name": "GEHEALTHCARE",
+    "website": "https://www.gehealthcare.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.gehealthcare.com/favicon.ico"
+  },
+  {
+    "name": "BAYER",
+    "website": "https://www.bayer.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.bayer.com/favicon.ico"
+  },
+  {
+    "name": "DANAHER",
+    "website": "https://www.danaher.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.danaher.com/favicon.ico"
+  },
+  {
+    "name": "CARGILL",
+    "website": "https://www.cargill.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.cargill.com/favicon.ico"
+  },
+  {
+    "name": "ADM",
+    "website": "https://www.adm.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.adm.com/favicon.ico"
+  },
+  {
+    "name": "NESTLE",
+    "website": "https://www.nestle.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.nestle.com/favicon.ico"
+  },
+  {
+    "name": "PEPSICO",
+    "website": "https://www.pepsico.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.pepsico.com/favicon.ico"
+  },
+  {
+    "name": "DANONE",
+    "website": "https://www.danone.com",
+    "country": "",
+    "sector": "",
+    "description": "",
+    "logo_url": "https://www.danone.com/favicon.ico"
+  }
+]
