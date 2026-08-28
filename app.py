@@ -3,6 +3,7 @@ import os
 import re
 import json
 import html
+import urllib.request
 from pathlib import Path
 from collections import Counter
 
@@ -38,6 +39,8 @@ st.set_page_config(
 ROOT = Path(__file__).resolve().parent
 DOCS_DIR = ROOT / "docs"
 COMPANIES_FILE = ROOT / "companies.json"
+# GitHub fallback: the repository is public and companies.json is on main.
+GITHUB_COMPANIES_URL = "https://raw.githubusercontent.com/vk7496/Scocoex.-Nexus-/main/companies.json"
 REPO_SEARCH_ROOTS = [
     ROOT,
     Path.cwd(),
@@ -622,6 +625,985 @@ def extract_pdf(path):
             pages.append({"page": page_number, "text": text.strip()})
 
     return pages
+
+
+def extract_docx(path):
+    document = Document(str(path))
+    sections = []
+
+    for paragraph in document.paragraphs:
+        text = paragraph.text.strip()
+        if text:
+            sections.append({"page": None, "text": text})
+
+    for table_index, table in enumerate(document.tables, start=1):
+        rows = []
+
+        for row in table.rows:
+            cells = [cell.text.strip() for cell in row.cells]
+            rows.append(" | ".join(cells))
+
+        if rows:
+            sections.append(
+                {
+                    "page": None,
+                    "text": f"[TABLE {table_index}]\n" + "\n".join(rows),
+                }
+            )
+
+    return sections
+
+
+@st.cache_data(show_spinner=False)
+def load_all_documents():
+    documents = []
+
+    if not DOCS_DIR.exists():
+        return documents
+
+    for path in sorted(DOCS_DIR.rglob("*")):
+        if not path.is_file():
+            continue
+        if path.suffix.lower() not in SUPPORTED_EXTENSIONS:
+            continue
+
+        try:
+            sections = (
+                extract_pdf(path)
+                if path.suffix.lower() == ".pdf"
+                else extract_docx(path)
+            )
+
+            documents.append(
+                {
+                    "name": path.name,
+                    "path": str(path),
+                    "extension": path.suffix.lower(),
+                    "sections": sections,
+                    "error": None,
+                }
+            )
+        except Exception as e:
+            documents.append(
+                {
+                    "name": path.name,
+                    "path": str(path),
+                    "extension": path.suffix.lower(),
+                    "sections": [],
+                    "error": str(e),
+                }
+            )
+
+    return documents
+
+
+def normalize_text(text):
+    return re.sub(r"\s+", " ", text).strip()
+
+
+@st.cache_data(show_spinner=False)
+def create_chunks(documents, chunk_size=1400, overlap=200):
+    chunks = []
+
+    for document in documents:
+        for section in document.get("sections", []):
+            text = normalize_text(section.get("text", ""))
+
+            if not text:
+                continue
+
+            start = 0
+            step = max(1, chunk_size - overlap)
+
+            while start < len(text):
+                chunk_text = text[start:start + chunk_size]
+
+                chunks.append(
+                    {
+                        "document": document["name"],
+                        "page": section.get("page"),
+                        "text": chunk_text,
+                    }
+                )
+
+                start += step
+
+    return chunks
+
+
+# ============================================================
+# LOCAL RETRIEVAL
+# ============================================================
+
+def tokenize(text):
+    return re.findall(
+        r"[\w\u0600-\u06FF\u4e00-\u9fff\u0400-\u04FF]+",
+        text.lower(),
+    )
+
+
+def retrieve_chunks(question, chunks, top_k=6):
+    question_tokens = set(tokenize(question))
+
+    if not question_tokens:
+        return []
+
+    scored = []
+
+    for chunk in chunks:
+        chunk_tokens = tokenize(chunk["text"])
+        counts = Counter(chunk_tokens)
+
+        score = sum(counts.get(token, 0) for token in question_tokens)
+
+        # Small bonus for exact phrase matches
+        if question.lower() in chunk["text"].lower():
+            score += 8
+
+        if score > 0:
+            scored.append((score, chunk))
+
+    scored.sort(key=lambda item: item[0], reverse=True)
+
+    return [item[1] for item in scored[:top_k]]
+
+
+# ============================================================
+# GROQ
+# ============================================================
+
+def get_groq_client():
+    api_key = None
+
+    try:
+        api_key = st.secrets.get("GROQ_API_KEY")
+    except Exception:
+        pass
+
+    if not api_key:
+        api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key or Groq is None:
+        return None
+
+    return Groq(api_key=api_key)
+
+
+def ask_groq(question, context, response_language):
+    client = get_groq_client()
+
+    if client is None:
+        return None
+
+    system_prompt = f"""
+You are SCOCOEX NEXUS AI, an event intelligence and institutional
+knowledge assistant.
+
+Answer primarily from the supplied SCOCOEX document context.
+
+Rules:
+- Do not invent facts.
+- If the supplied documents do not support an answer, say that clearly.
+- Distinguish facts from reasonable interpretation.
+- Preserve company names, project names and terminology.
+- Answer in {response_language}.
+- Be concise but useful for investors, delegates, companies and decision-makers.
+- When relevant, identify the source document and page.
+"""
+
+    user_prompt = f"""
+QUESTION:
+{question}
+
+DOCUMENT CONTEXT:
+{context}
+
+Return the best evidence-based answer.
+"""
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.2,
+            max_tokens=2200,
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return f"Groq error: {e}"
+
+
+def summarize_document(document):
+    full_text = "\n".join(
+        section["text"]
+        for section in document.get("sections", [])
+    )[:18000]
+
+    if not full_text.strip():
+        return t("no_text")
+
+    client = get_groq_client()
+
+    if client is None:
+        return t("groq_missing")
+
+    language_name = {
+        "en": "English",
+        "fa": "Persian",
+        "ar": "Arabic",
+        "zh": "Chinese",
+        "ru": "Russian",
+    }.get(st.session_state.get("lang_code", "en"), "English")
+
+    prompt = f"""
+Analyze this SCOCOEX document and produce a professional executive summary
+in {language_name}.
+
+Structure:
+1. Executive Summary
+2. Key Points
+3. Organizations / Companies
+4. Important Numbers
+5. Opportunities
+6. Strategic Takeaways
+
+DOCUMENT:
+{full_text}
+"""
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a professional strategic intelligence analyst.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.2,
+            max_tokens=2400,
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return f"Groq error: {e}"
+
+
+# ============================================================
+# PDF EXPORT
+# ============================================================
+
+def create_pdf(text, title="SCOCOEX NEXUS AI Report"):
+    if SimpleDocTemplate is None:
+        return None
+
+    from io import BytesIO
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    styles = getSampleStyleSheet()
+
+    story = [
+        Paragraph(escape(title), styles["Title"]),
+        Spacer(1, 16),
+    ]
+
+    for block in text.split("\n"):
+        block = block.strip()
+        if block:
+            story.append(Paragraph(escape(block), styles["BodyText"]))
+            story.append(Spacer(1, 7))
+
+    doc.build(story)
+
+    buffer.seek(0)
+    return buffer.getvalue()
+
+
+# ============================================================
+# COMPANIES JSON
+# ============================================================
+
+@st.cache_data(show_spinner=False)
+def load_companies():
+    """Load companies from local repository first, then GitHub raw as fallback.
+
+    The deployed Streamlit environment may not expose the Git repository root at
+    the same filesystem path as the local development environment. Since the
+    user's companies.json is public and lives at the repository root on main,
+    the raw GitHub URL is a reliable fallback.
+    """
+    local_candidates = [
+        COMPANIES_FILE,
+        ROOT / "data" / "companies.json",
+        ROOT / "assets" / "companies.json",
+        ROOT / "docs" / "companies.json",
+    ]
+
+    # Also search nearby repository roots, but avoid an expensive full filesystem
+    # scan when the normal paths already work.
+    for search_root in REPO_SEARCH_ROOTS:
+        try:
+            if search_root.exists():
+                candidate = search_root / "companies.json"
+                if candidate.is_file():
+                    local_candidates.append(candidate)
+        except Exception:
+            pass
+
+    raw = None
+    source = None
+
+    # 1) Local file
+    for candidate in local_candidates:
+        try:
+            if candidate.is_file():
+                raw = candidate.read_text(encoding="utf-8-sig")
+                source = str(candidate)
+                break
+        except Exception:
+            continue
+
+    # 2) GitHub fallback
+    if raw is None:
+        try:
+            req = urllib.request.Request(
+                GITHUB_COMPANIES_URL,
+                headers={"User-Agent": "SCOCOEX-NEXUS/1.0"},
+            )
+            with urllib.request.urlopen(req, timeout=15) as response:
+                raw = response.read().decode("utf-8-sig")
+                source = "GitHub: vk7496/Scocoex.-Nexus-/main/companies.json"
+        except Exception as exc:
+            return [], (
+                "companies.json was not found locally and could not be loaded from GitHub. "
+                f"GitHub URL: {GITHUB_COMPANIES_URL}\n\n"
+                f"Exact error: {exc}"
+            )
+
+    try:
+        raw = raw.strip()
+        if not raw:
+            return [], f"companies.json is empty. Source: {source}"
+
+        data = json.loads(raw)
+
+        if isinstance(data, list):
+            companies = data
+        elif isinstance(data, dict):
+            for key in ("companies", "data", "organizations", "items"):
+                if isinstance(data.get(key), list):
+                    companies = data[key]
+                    break
+            else:
+                return [], (
+                    "JSON object found, but no companies/data/organizations/items list exists. "
+                    f"Source: {source}"
+                )
+        else:
+            return [], "JSON root must be a list or an object containing a list"
+
+        normalized = []
+        for item in companies:
+            if isinstance(item, str):
+                normalized.append({
+                    "name": item,
+                    "website": "",
+                    "country": "",
+                    "sector": "",
+                    "description": "",
+                    "logo": "",
+                })
+                continue
+
+            if not isinstance(item, dict):
+                continue
+
+            name = (
+                item.get("name")
+                or item.get("company")
+                or item.get("title")
+                or "International Organization"
+            )
+            website = (
+                item.get("website")
+                or item.get("url")
+                or item.get("site")
+                or ""
+            )
+            country = item.get("country") or item.get("location") or ""
+            sector = item.get("sector") or item.get("industry") or ""
+            description = item.get("description") or item.get("about") or ""
+            logo = item.get("logo_url") or item.get("logo") or ""
+
+            normalized.append({
+                "name": str(name),
+                "website": str(website),
+                "country": str(country),
+                "sector": str(sector),
+                "description": str(description),
+                "logo": str(logo),
+            })
+
+        return normalized, None
+
+    except json.JSONDecodeError as exc:
+        return [], f"Invalid JSON in companies.json: {exc}. Source: {source}"
+    except Exception as exc:
+        return [], f"Could not parse companies.json: {exc}. Source: {source}"
+
+
+# ============================================================
+# SESSION STATE
+# ============================================================
+
+if "language_name" not in st.session_state:
+    st.session_state.language_name = "English"
+
+st.session_state.lang_code = LANGUAGES[st.session_state.language_name]
+apply_direction()
+
+# Deployment/version marker: confirms Streamlit is running this exact app.py.
+st.caption("SCOCOEX NEXUS • AI Knowledge Platform • v2.1")
+
+documents = load_all_documents()
+chunks = create_chunks(documents)
+companies, companies_error = load_companies()
+
+
+# ============================================================
+# SIDEBAR
+# ============================================================
+
+st.sidebar.markdown(
+    """
+<div style="padding:8px 0 24px 0;">
+    <div style="font-size:27px;font-weight:800;">🌐 SCOCOEX</div>
+    <div style="color:#8D98AF;font-size:13px;">NEXUS Intelligence Platform</div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+st.sidebar.markdown(f"**{t('language')}**")
+
+language_name = st.sidebar.selectbox(
+    t("language"),
+    list(LANGUAGES.keys()),
+    index=list(LANGUAGES.keys()).index(st.session_state.language_name),
+    label_visibility="collapsed",
+)
+
+if language_name != st.session_state.language_name:
+    st.session_state.language_name = language_name
+    st.rerun()
+
+pages = [
+    t("home"),
+    t("info"),
+    t("assistant"),
+    t("companies"),
+    t("intel"),
+    t("gallery"),
+    t("about"),
+    t("contact"),
+]
+
+page = st.sidebar.radio(
+    t("nav"),
+    pages,
+    label_visibility="collapsed",
+)
+
+st.sidebar.divider()
+
+st.sidebar.caption(f"{t('documents')}: {len(documents)}")
+st.sidebar.caption(f"{t('international_companies')}: {len(companies)}")
+
+
+# ============================================================
+# HOME
+# ============================================================
+
+if page == t("home"):
+
+    # Official SCOCOEX logo
+    if LOGO_PATH and LOGO_PATH.exists():
+        logo_col = st.columns([1, 3, 1])[1]
+        with logo_col:
+            st.image(str(LOGO_PATH), use_container_width=True)
+
+    st.markdown(
+        f"""
+<div class="hero" dir="{get_direction()}">
+    <div class="hero-label">{t("hero_label")}</div>
+    <h1>{t("hero_title")}</h1>
+    <p>{t("hero_text")}</p>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    metrics = [
+        (t("documents"), len(documents)),
+        (t("chunks"), len(chunks)),
+        (t("international_companies"), len(companies)),
+        (t("languages"), "5"),
+    ]
+
+    for col, (label, value) in zip((c1, c2, c3, c4), metrics):
+        with col:
+            st.markdown(
+                f"""
+<div class="metric-card" dir="{get_direction()}">
+    <div class="muted">{escape(label)}</div>
+    <div class="metric-number">{escape(value)}</div>
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown(f"### {t('knowledge')}")
+
+    col1, col2, col3 = st.columns(3)
+
+    cards = [
+        ("📚", t("knowledge"), t("knowledge_text")),
+        ("🤖", t("ai"), t("ai_text")),
+        ("🌍", t("network"), t("network_text")),
+    ]
+
+    for col, (icon, title, text) in zip((col1, col2, col3), cards):
+        with col:
+            st.markdown(
+                f"""
+<div class="feature-card" dir="{get_direction()}">
+    <div style="font-size:28px;">{icon}</div>
+    <h3>{escape(title)}</h3>
+    <div class="muted" style="font-size:14px;line-height:1.7;">
+        {escape(text)}
+    </div>
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+
+# ============================================================
+# INFORMATION CENTER
+# ============================================================
+
+elif page == t("info"):
+
+    st.markdown(f'<div class="section-title">{t("information_title")}</div>', unsafe_allow_html=True)
+    st.write(t("information_text"))
+
+    if not DOCS_DIR.exists():
+        st.error(t("docs_missing"))
+    elif not documents:
+        st.warning(t("no_docs"))
+    else:
+        st.success(f"{len(documents)} {t('documents').lower()}")
+
+        search = st.text_input(t("search_documents"))
+
+        filtered = [
+            doc for doc in documents
+            if not search or search.lower() in doc["name"].lower()
+        ]
+
+        for document in filtered:
+            with st.expander(f"📄 {document['name']}"):
+
+                col1, col2, col3 = st.columns(3)
+
+                col1.metric(t("extracted_sections"), len(document["sections"]))
+
+                total_words = sum(
+                    len(tokenize(s["text"]))
+                    for s in document["sections"]
+                )
+
+                col2.metric(t("words"), total_words)
+
+                numeric_count = len(
+                    re.findall(
+                        r"\b\d+(?:[.,]\d+)?\b",
+                        " ".join(s["text"] for s in document["sections"]),
+                    )
+                )
+
+                col3.metric(t("numeric_values"), numeric_count)
+
+                if document.get("error"):
+                    st.error(document["error"])
+
+                if st.button(
+                    t("summary"),
+                    key=f"summary_{document['name']}",
+                    use_container_width=True,
+                ):
+                    with st.spinner(t("generating")):
+                        summary = summarize_document(document)
+
+                    st.markdown(
+                        f'<div class="answer-box" dir="{get_direction()}">',
+                        unsafe_allow_html=True,
+                    )
+                    st.markdown(summary)
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+                    pdf_data = create_pdf(summary, f"SCOCOEX — {document['name']}")
+
+                    if pdf_data:
+                        st.download_button(
+                            t("download_pdf"),
+                            data=pdf_data,
+                            file_name=f"SCOCOEX_{Path(document['name']).stem}_summary.pdf",
+                            mime="application/pdf",
+                            use_container_width=True,
+                        )
+
+
+# ============================================================
+# AI ASSISTANT
+# ============================================================
+
+elif page == t("assistant"):
+
+    st.markdown(f'<div class="section-title">{t("ask_title")}</div>', unsafe_allow_html=True)
+    st.write(t("ask_caption"))
+
+    question = st.text_area(
+        t("your_question"),
+        height=140,
+        placeholder="Ask about the SCOCOEX documents...",
+    )
+
+    if st.button(
+        t("ask_button"),
+        type="primary",
+        use_container_width=True,
+    ):
+
+        if not question.strip():
+            st.warning(t("your_question"))
+        elif not chunks:
+            st.warning(t("no_docs"))
+        else:
+
+            with st.spinner(t("searching")):
+                results = retrieve_chunks(question, chunks, top_k=6)
+
+            if not results:
+                st.warning(t("no_results"))
+            else:
+
+                context_parts = []
+
+                for result in results:
+                    source = result["document"]
+                    page_number = result.get("page")
+
+                    source_info = (
+                        f"{source} — Page {page_number}"
+                        if page_number
+                        else source
+                    )
+
+                    context_parts.append(
+                        f"SOURCE: {source_info}\nCONTENT:\n{result['text']}"
+                    )
+
+                context = "\n\n".join(context_parts)
+
+                language_name_map = {
+                    "en": "English",
+                    "fa": "Persian",
+                    "ar": "Arabic",
+                    "zh": "Chinese",
+                    "ru": "Russian",
+                }
+
+                with st.spinner(t("generating")):
+                    answer = ask_groq(
+                        question,
+                        context,
+                        language_name_map[st.session_state.lang_code],
+                    )
+
+                if answer is None:
+                    st.warning(t("groq_missing"))
+                else:
+
+                    st.markdown(
+                        f'<div class="answer-box" dir="{get_direction()}">',
+                        unsafe_allow_html=True,
+                    )
+                    st.markdown(answer)
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+                    pdf_data = create_pdf(answer, "SCOCOEX NEXUS — AI Answer")
+
+                    if pdf_data:
+                        st.download_button(
+                            t("download_pdf"),
+                            data=pdf_data,
+                            file_name="SCOCOEX_NEXUS_AI_Answer.pdf",
+                            mime="application/pdf",
+                            use_container_width=True,
+                        )
+
+                    st.markdown(f"### {t('sources')}")
+
+                    seen = set()
+
+                    for result in results:
+                        key = (result["document"], result.get("page"))
+
+                        if key in seen:
+                            continue
+
+                        seen.add(key)
+
+                        source = result["document"]
+                        page_number = result.get("page")
+
+                        source_text = (
+                            f"📄 {source} — Page {page_number}"
+                            if page_number
+                            else f"📄 {source}"
+                        )
+
+                        st.markdown(
+                            f'<div class="source-box" dir="{get_direction()}">{escape(source_text)}</div>',
+                            unsafe_allow_html=True,
+                        )
+
+
+# ============================================================
+# COMPANIES
+# ============================================================
+
+elif page == t("companies"):
+
+    st.markdown(f'<div class="section-title">{t("companies_title")}</div>', unsafe_allow_html=True)
+
+    if companies_error:
+        st.error(t("companies_error"))
+        st.code(companies_error)
+        st.info(f"Repository search roots: {", ".join(str(p) for p in REPO_SEARCH_ROOTS)}")
+
+    elif not companies:
+        st.warning(t("no_companies"))
+        st.info(f"Repository search roots: {", ".join(str(p) for p in REPO_SEARCH_ROOTS)}")
+
+    else:
+
+        search = st.text_input(t("search_company"))
+
+        filtered = [
+            company for company in companies
+            if not search
+            or search.lower() in json.dumps(
+                company,
+                ensure_ascii=False
+            ).lower()
+        ]
+
+        st.caption(f"{len(filtered)} {t('company_count')}")
+
+        columns = st.columns(3)
+
+        for index, company in enumerate(filtered):
+
+            with columns[index % 3]:
+
+                name = company.get("name", "International Organization")
+                website = company.get("website", "")
+                sector = company.get("sector", "")
+                logo = company.get("logo", "")
+
+                if not logo and website:
+                    domain = re.sub(r"^https?://", "", website).split("/")[0]
+                    logo = f"https://www.google.com/s2/favicons?domain={domain}&sz=128"
+
+                logo_html = ""
+
+                if logo:
+                    logo_html = (
+                        f'<img class="company-logo" src="{escape(logo)}" '
+                        f'alt="{escape(name)}">'
+                    )
+                else:
+                    initial = escape(name[:1].upper())
+                    logo_html = f'<div class="company-initial">{initial}</div>'
+
+                link_html = ""
+
+                if website:
+                    safe_website = escape(website)
+                    link_html = (
+                        f'<a href="{safe_website}" target="_blank" '
+                        f'rel="noopener noreferrer">{escape(t("visit"))}</a>'
+                    )
+
+                st.markdown(
+                    f"""
+<div class="company-card" dir="{get_direction()}">
+    <div style="display:flex;gap:14px;align-items:center;">
+        {logo_html}
+        <div>
+            <div style="font-size:18px;font-weight:700;">
+                {escape(name)}
+            </div>
+            <div class="muted">
+                {escape(sector)}
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:20px;">
+        {link_html}
+    </div>
+</div>
+""",
+                    unsafe_allow_html=True,
+                )
+
+
+# ============================================================
+# INTELLIGENCE
+# ============================================================
+
+elif page == t("intel"):
+
+    st.markdown(f'<div class="section-title">{t("intel_title")}</div>', unsafe_allow_html=True)
+    st.write(t("intel_caption"))
+
+    if not documents:
+        st.warning(t("no_docs"))
+    else:
+
+        rows = []
+
+        for document in documents:
+            full_text = " ".join(
+                section["text"]
+                for section in document["sections"]
+            )
+
+            rows.append(
+                {
+                    t("source_file"): document["name"],
+                    t("words"): len(tokenize(full_text)),
+                    t("numeric_values"): len(
+                        re.findall(r"\b\d+(?:[.,]\d+)?\b", full_text)
+                    ),
+                    t("extracted_sections"): len(document["sections"]),
+                }
+            )
+
+        df = pd.DataFrame(rows)
+
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        st.markdown(f"### {t('document_size')}")
+
+        st.bar_chart(
+            df.set_index(t("source_file"))[t("words")]
+        )
+
+        st.markdown(f"### {t('numeric')}")
+
+        st.bar_chart(
+            df.set_index(t("source_file"))[t("numeric_values")]
+        )
+
+
+# ============================================================
+# GALLERY
+# ============================================================
+
+elif page == t("gallery"):
+
+    st.markdown(f'<div class="section-title">{t("gallery_title")}</div>', unsafe_allow_html=True)
+    st.write(t("gallery_text"))
+
+
+# ============================================================
+# ABOUT
+# ============================================================
+
+elif page == t("about"):
+
+    st.markdown(f'<div class="section-title">{t("about_title")}</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        f"""
+<div class="feature-card" dir="{get_direction()}">
+    <h3>SCOCOEX NEXUS</h3>
+    <p>
+    {escape(t("hero_text"))}
+    </p>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
+# ============================================================
+# CONTACT
+# ============================================================
+
+elif page == t("contact"):
+
+    st.markdown(f'<div class="section-title">{t("contact_title")}</div>', unsafe_allow_html=True)
+
+    with st.form("contact_form"):
+
+        name = st.text_input(t("name"))
+        company = st.text_input(t("company_org"))
+        email = st.text_input(t("email"))
+
+        interest = st.selectbox(
+            t("interest"),
+            [
+                "Investment",
+                "Partnership",
+                "International Company",
+                "Government",
+                "Technology",
+                "Media",
+                "Other",
+            ],
+        )
+
+        message = st.text_area(
+            t("message"),
+            height=160,
+        )
+
+        submitted = st.form_submit_button(
+            t("send"),
+            type="primary",
+            use_container_width=True,
+        )
+
+        if submitted:
+            st.success(t("received"))
 
 
 def extract_docx(path):
