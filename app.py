@@ -38,6 +38,11 @@ st.set_page_config(
 ROOT = Path(__file__).resolve().parent
 DOCS_DIR = ROOT / "docs"
 COMPANIES_FILE = ROOT / "companies.json"
+REPO_SEARCH_ROOTS = [
+    ROOT,
+    Path.cwd(),
+    Path("/mount/src"),
+]
 
 # Logo: accepts assets/scocoex_logo.png, assets/scocoex_logo-1.png,
 # or any other PNG beginning with scocoex_logo.
@@ -927,14 +932,29 @@ def create_pdf(text, title="SCOCOEX NEXUS AI Report"):
 def load_companies():
     # First try the expected root location. If Streamlit/GitHub places the
     # file elsewhere, search the repository recursively.
-    candidates = [COMPANIES_FILE]
-    for candidate in ROOT.rglob("companies.json"):
-        if candidate not in candidates:
-            candidates.append(candidate)
+    # Search broadly because Streamlit Cloud can run with a working directory
+    # that differs from the repository root.
+    candidates = []
+    seen = set()
+    for search_root in REPO_SEARCH_ROOTS:
+        try:
+            if search_root.exists():
+                for candidate in search_root.rglob("companies.json"):
+                    key = str(candidate.resolve())
+                    if key not in seen:
+                        seen.add(key)
+                        candidates.append(candidate)
+        except Exception:
+            pass
+
+    # Prefer the repository-root file when it exists.
+    if COMPANIES_FILE.is_file():
+        candidates.insert(0, COMPANIES_FILE)
 
     existing = next((p for p in candidates if p.is_file()), None)
     if existing is None:
-        return [], "companies.json was not found in the deployed repository"
+        checked = ", ".join(str(p) for p in REPO_SEARCH_ROOTS)
+        return [], f"companies.json was not found. Searched: {checked}"
 
     try:
         raw = existing.read_text(encoding="utf-8-sig").strip()
@@ -1020,6 +1040,9 @@ if "language_name" not in st.session_state:
 
 st.session_state.lang_code = LANGUAGES[st.session_state.language_name]
 apply_direction()
+
+# Deployment/version marker: confirms Streamlit is running this exact app.py.
+st.caption("SCOCOEX NEXUS • AI Knowledge Platform • v2.1")
 
 documents = load_all_documents()
 chunks = create_chunks(documents)
@@ -1349,11 +1372,11 @@ elif page == t("companies"):
     if companies_error:
         st.error(t("companies_error"))
         st.code(companies_error)
-        st.info(f"Expected file path: {COMPANIES_FILE}")
+        st.info(f"Repository search roots: {", ".join(str(p) for p in REPO_SEARCH_ROOTS)}")
 
     elif not companies:
         st.warning(t("no_companies"))
-        st.info(f"Expected file path: {COMPANIES_FILE}")
+        st.info(f"Repository search roots: {", ".join(str(p) for p in REPO_SEARCH_ROOTS)}")
 
     else:
 
