@@ -39,6 +39,11 @@ ROOT = Path(__file__).resolve().parent
 DOCS_DIR = ROOT / "docs"
 COMPANIES_FILE = ROOT / "companies.json"
 
+# Logo: accepts assets/scocoex_logo.png, assets/scocoex_logo-1.png,
+# or any other PNG beginning with scocoex_logo.
+LOGO_FILES = list((ROOT / "assets").glob("scocoex_logo*.png")) if (ROOT / "assets").exists() else []
+LOGO_PATH = LOGO_FILES[0] if LOGO_FILES else None
+
 SUPPORTED_EXTENSIONS = {".pdf", ".docx"}
 
 LANGUAGES = {
@@ -920,11 +925,19 @@ def create_pdf(text, title="SCOCOEX NEXUS AI Report"):
 
 @st.cache_data(show_spinner=False)
 def load_companies():
-    if not COMPANIES_FILE.exists():
-        return [], "File does not exist"
+    # First try the expected root location. If Streamlit/GitHub places the
+    # file elsewhere, search the repository recursively.
+    candidates = [COMPANIES_FILE]
+    for candidate in ROOT.rglob("companies.json"):
+        if candidate not in candidates:
+            candidates.append(candidate)
+
+    existing = next((p for p in candidates if p.is_file()), None)
+    if existing is None:
+        return [], "companies.json was not found in the deployed repository"
 
     try:
-        raw = COMPANIES_FILE.read_text(encoding="utf-8-sig").strip()
+        raw = existing.read_text(encoding="utf-8-sig").strip()
 
         if not raw:
             return [], "File is empty"
@@ -1068,6 +1081,12 @@ st.sidebar.caption(f"{t('international_companies')}: {len(companies)}")
 # ============================================================
 
 if page == t("home"):
+
+    # Official SCOCOEX logo
+    if LOGO_PATH and LOGO_PATH.exists():
+        logo_col = st.columns([1, 3, 1])[1]
+        with logo_col:
+            st.image(str(LOGO_PATH), use_container_width=True)
 
     st.markdown(
         f"""
