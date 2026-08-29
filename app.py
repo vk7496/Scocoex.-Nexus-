@@ -750,11 +750,26 @@ def direction():
 # ============================================================
 
 def render_html(content):
-    cleaned = textwrap.dedent(content).strip()
-    st.markdown(
-        cleaned,
-        unsafe_allow_html=True,
-    )
+    """
+    Render raw HTML directly instead of passing it through
+    the Markdown parser.
+
+    This prevents Streamlit from displaying HTML tags such as
+    <div>, <h1>, <p>, etc. as literal code/text.
+    """
+    cleaned = textwrap.dedent(str(content)).strip()
+
+    if not cleaned:
+        return
+
+    try:
+        st.html(cleaned)
+    except AttributeError:
+        # Compatibility fallback for older Streamlit versions.
+        st.markdown(
+            cleaned,
+            unsafe_allow_html=True,
+        )
 
 
 # ============================================================
