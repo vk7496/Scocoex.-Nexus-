@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HOOSHiKO AI | SCOCOEX Global Intelligence Platform</title>
+
+<meta name="description"
+content="HOOSHiKO AI — The Intelligent Global Knowledge & Business Platform of SCOCOEX">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#050914;
+    --bg2:#08111f;
+    --panel:#0c1728;
+    --panel2:#101d30;
+    --line:rgba(255,255,255,.09);
+
+    --text:#f5f7fb;
+    --muted:#93a4bb;
+
+    --cyan:#38d9ff;
+    --blue:#4d7cff;
+    --gold:#d8b36a;
+    --green:#36d399;
+
+    --radius:22px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:
+        radial-gradient(circle at 80% 5%,rgba(56,217,255,.10),transparent 25%),
+        radial-gradient(circle at 10% 40%,rgba(77,124,255,.08),transparent 30%),
+        var(--bg);
+
+    color:var(--text);
+    font-family:"Vazirmatn","Inter",sans-serif;
+    min-height:100vh;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button{
+    font-family:inherit;
+}
+
+.container{
+    width:min(1400px,92%);
+    margin:auto;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+    height:42px;
+    border-bottom:1px solid var(--line);
+    background:rgba(3,8,17,.85);
+    backdrop-filter:blur(15px);
+    display:flex;
+    align-items:center;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.topbar-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.status{
+    display:flex;
+    gap:9px;
+    align-items:center;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    background:var(--green);
+    border-radius:50%;
+    box-shadow:0 0 12px var(--green);
+}
+
+.top-links{
+    display:flex;
+    gap:20px;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    border-bottom:1px solid var(--line);
+    background:rgba(5,9,20,.78);
+    backdrop-filter:blur(20px);
+}
+
+.nav-inner{
+    height:82px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:30px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.logo-box{
+    width:48px;
+    height:48px;
+    border-radius:15px;
+    border:1px solid rgba(56,217,255,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at center,rgba(56,217,255,.18),transparent 70%),
+        #071222;
+    overflow:hidden;
+}
+
+.logo-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.brand-text strong{
+    display:block;
+    font-size:17px;
+    letter-spacing:.7px;
+}
+
+.brand-text span{
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:1px;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    font-size:13px;
+    color:#bdc9da;
+}
+
+.nav-links a{
+    transition:.2s;
+}
+
+.nav-links a:hover{
+    color:var(--cyan);
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.lang{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.03);
+    color:white;
+    border-radius:12px;
+    padding:9px 13px;
+}
+
+.ai-mini{
+    background:linear-gradient(135deg,var(--cyan),var(--blue));
+    border:0;
+    color:#02101b;
+    font-weight:800;
+    padding:11px 16px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:730px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-grid{
+    position:absolute;
+    inset:0;
+    opacity:.17;
+    background-image:
+        linear-gradient(rgba(56,217,255,.18) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(56,217,255,.18) 1px,transparent 1px);
+    background-size:70px 70px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:850px;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    border:1px solid rgba(56,217,255,.24);
+    background:rgba(56,217,255,.06);
+    color:var(--cyan);
+    padding:8px 14px;
+    border-radius:100px;
+    font-size:12px;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-family:"Inter","Vazirmatn",sans-serif;
+    font-size:clamp(52px,8vw,105px);
+    line-height:.96;
+    letter-spacing:-4px;
+    margin-bottom:30px;
+}
+
+.hero h1 span{
+    background:linear-gradient(100deg,#fff,var(--cyan),#718cff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    max-width:650px;
+    color:#a9b7c9;
+    font-size:18px;
+    line-height:2;
+    margin-bottom:35px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.primary{
+    border:0;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));
+    color:#03101a;
+    padding:15px 24px;
+    border-radius:14px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.secondary{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.035);
+    color:white;
+    padding:15px 24px;
+    border-radius:14px;
+    cursor:pointer;
+}
+
+.hero-orbit{
+    position:absolute;
+    width:540px;
+    height:540px;
+    left:-130px;
+    top:100px;
+    border:1px solid rgba(56,217,255,.10);
+    border-radius:50%;
+    box-shadow:
+        0 0 100px rgba(56,217,255,.07),
+        inset 0 0 80px rgba(56,217,255,.03);
+}
+
+.hero-orbit:before,
+.hero-orbit:after{
+    content:"";
+    position:absolute;
+    inset:70px;
+    border:1px solid rgba(77,124,255,.13);
+    border-radius:50%;
+}
+
+.hero-orbit:after{
+    inset:150px;
+}
+
+.core{
+    position:absolute;
+    width:115px;
+    height:115px;
+    border-radius:50%;
+    background:
+        radial-gradient(circle,#67e7ff 0,#2384ff 28%,#091b35 70%);
+    box-shadow:0 0 80px rgba(56,217,255,.45);
+    top:calc(50% - 57px);
+    left:calc(50% - 57px);
+}
+
+/* =========================
+   AI COMMAND
+========================= */
+
+.ai-command{
+    margin-top:-75px;
+    position:relative;
+    z-index:10;
+}
+
+.ai-card{
+    background:
+        linear-gradient(135deg,rgba(56,217,255,.09),rgba(77,124,255,.05)),
+        rgba(8,17,31,.95);
+
+    border:1px solid rgba(56,217,255,.18);
+    border-radius:28px;
+    padding:25px;
+    box-shadow:0 25px 100px rgba(0,0,0,.35);
+}
+
+.ai-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.ai-title h2{
+    font-size:20px;
+}
+
+.ai-title span{
+    font-size:11px;
+    color:var(--green);
+}
+
+.ai-input{
+    min-height:80px;
+    border:1px solid var(--line);
+    border-radius:17px;
+    background:#07101e;
+    padding:20px;
+    color:#8090a7;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+}
+
+.ai-suggestions{
+    display:flex;
+    gap:9px;
+    margin-top:13px;
+    flex-wrap:wrap;
+}
+
+.ai-suggestions button{
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--line);
+    color:#9eacc0;
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    padding:100px 0;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-bottom:35px;
+}
+
+.section-kicker{
+    color:var(--cyan);
+    font-size:11px;
+    letter-spacing:2px;
+    margin-bottom:10px;
+}
+
+.section h2{
+    font-size:35px;
+}
+
+.section-head p{
+    color:var(--muted);
+    max-width:500px;
+    line-height:1.9;
+    font-size:13px;
+}
+
+/* =========================
+   GLOBAL STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.stat{
+    padding:28px;
+    background:linear-gradient(145deg,#0c1728,#091321);
+    border:1px solid var(--line);
+    border-radius:20px;
+}
+
+.stat-number{
+    font-family:Inter;
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* =========================
+   GLOBAL INTELLIGENCE
+========================= */
+
+.intelligence{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:20px;
+}
+
+.map-card{
+    min-height:440px;
+    border-radius:24px;
+    border:1px solid var(--line);
+    background:
+        radial-gradient(circle at 45% 50%,rgba(56,217,255,.15),transparent 23%),
+        radial-gradient(circle at 70% 30%,rgba(77,124,255,.12),transparent 25%),
+        #081220;
+    position:relative;
+    overflow:hidden;
+}
+
+.map-card:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+        radial-gradient(circle,rgba(255,255,255,.35) 1px,transparent 1px);
+    background-size:35px 35px;
+    opacity:.2;
+}
+
+.map-label{
+    position:absolute;
+    background:rgba(4,10,19,.9);
+    border:1px solid var(--line);
+    padding:9px 12px;
+    border-radius:10px;
+    font-size:11px;
+    color:#b9c7d8;
+}
+
+.m1{top:23%;right:25%}
+.m2{top:38%;right:47%}
+.m3{top:52%;right:67%}
+.m4{top:63%;right:31%}
+.m5{top:30%;right:72%}
+
+.intel-panel{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.intel-item{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px;
+    background:rgba(255,255,255,.025);
+}
+
+.intel-item h3{
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.intel-item p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+}
+
+/* =========================
+   FEATURE GRID
+========================= */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.feature{
+    min-height:190px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:25px;
+    background:
+        linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015));
+    transition:.25s;
+}
+
+.feature:hover{
+    transform:translateY(-5px);
+    border-color:rgba(56,217,255,.3);
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.feature-icon{
+    font-size:25px;
+    margin-bottom:18px;
+}
+
+.feature h3{
+    font-size:17px;
+    margin-bottom:10px;
+}
+
+.feature p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.9;
+}
+
+/* =========================
+   LIVE SUMMIT
+========================= */
+
+.live{
+    background:
+        radial-gradient(circle at 20% 50%,rgba(255,70,70,.08),transparent 25%),
+        #07101c;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+}
+
+.live-grid{
+    display:grid;
+    grid-template-columns:1.35fr .65fr;
+    gap:20px;
+}
+
+.video{
+    min-height:440px;
+    border-radius:24px;
+    background:
+        linear-gradient(rgba(2,7,15,.15),rgba(2,7,15,.85)),
+        radial-gradient(circle at center,rgba(50,100,160,.3),#020711 65%);
+    border:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+}
+
+.live-badge{
+    position:absolute;
+    top:20px;
+    right:20px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#10131a;
+    padding:8px 12px;
+    border-radius:9px;
+    color:#ff7777;
+    font-size:11px;
+    border:1px solid rgba(255,100,100,.2);
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+    background:#ff5151;
+    border-radius:50%;
+    box-shadow:0 0 10px #ff5151;
+}
+
+.play{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:rgba(255,255,255,.95);
+    color:#07101c;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:25px;
+}
+
+.video-info{
+    position:absolute;
+    bottom:25px;
+    right:25px;
+}
+
+.video-info h3{
+    font-size:22px;
+    margin-bottom:7px;
+}
+
+.video-info p{
+    color:#9caabe;
+    font-size:12px;
+}
+
+.live-side{
+    border:1px solid var(--line);
+    border-radius:24px;
+    background:#0a1422;
+    padding:25px;
+}
+
+.live-side h3{
+    margin-bottom:20px;
+}
+
+.schedule{
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+}
+
+.event{
+    display:flex;
+    gap:13px;
+    padding-bottom:13px;
+    border-bottom:1px solid var(--line);
+}
+
+.time{
+    color:var(--cyan);
+    font-size:11px;
+    min-width:50px;
+}
+
+.event strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.event span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* =========================
+   COUNTRIES / COMPANIES
+========================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.entity{
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:#0a1422;
+    padding:20px;
+}
+
+.entity-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.entity-logo{
+    width:48px;
+    height:48px;
+    border-radius:13px;
+    background:#111e30;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.entity-tag{
+    font-size:9px;
+    color:var(--cyan);
+    border:1px solid rgba(56,217,255,.2);
+    padding:5px 8px;
+    border-radius:8px;
+}
+
+.entity h3{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.entity p{
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* =========================
+   KEY IRANIAN PARTNERS
+========================= */
+
+.key-partners{
+    background:
+        linear-gradient(135deg,rgba(216,179,106,.07),rgba(56,217,255,.03));
+    border:1px solid rgba(216,179,106,.16);
+    border-radius:27px;
+    padding:30px;
+}
+
+.partner-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.partner{
+    min-height:190px;
+    padding:25px;
+    border-radius:19px;
+    border:1px solid rgba(216,179,106,.15);
+    background:rgba(0,0,0,.18);
+}
+
+.partner small{
+    color:var(--gold);
+}
+
+.partner h3{
+    margin:14px 0 8px;
+    font-size:19px;
+}
+
+.partner p{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.8;
+}
+
+/* =========================
+   AI EXAMPLES
+========================= */
+
+.questions{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.question{
+    border:1px solid var(--line);
+    background:#091421;
+    padding:23px;
+    border-radius:17px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.question:hover{
+    border-color:rgba(56,217,255,.3);
+}
+
+.question span{
+    color:var(--cyan);
+    font-size:11px;
+}
+
+.question p{
+    margin-top:10px;
+    font-size:14px;
+    line-height:1.8;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    border-top:1px solid var(--line);
+    padding:50px 0;
+    background:#030811;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr repeat(3,1fr);
+    gap:40px;
+}
+
+.footer-brand p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.9;
+    max-width:330px;
+    margin-top:15px;
+}
+
+footer h4{
+    font-size:12px;
+    margin-bottom:16px;
+}
+
+footer ul{
+    list-style:none;
+    color:var(--muted);
+    font-size:11px;
+    line-height:2.4;
+}
+
+.copyright{
+    border-top:1px solid var(--line);
+    margin-top:40px;
+    padding-top:20px;
+    color:#657388;
+    font-size:10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+    .nav-links{
+        display:none;
+    }
+
+    .hero-orbit{
+        opacity:.35;
+        left:-300px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .features{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .intelligence,
+    .live-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+
+    .top-links{
+        display:none;
+    }
+
+    .hero{
+        min-height:650px;
+    }
+
+    .hero h1{
+        font-size:55px;
+        letter-spacing:-2px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .stats,
+    .features,
+    .cards,
+    .partner-grid,
+    .questions{
+        grid-template-columns:1fr;
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr;
+    }
+
+    .ai-command{
+        margin-top:-45px;
+    }
+
+    .section{
+        padding:70px 0;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     TOP STATUS
+========================= -->
+
+<div class="topbar">
+    <div class="container topbar-inner">
+
+        <div class="status">
+            <span class="status-dot"></span>
+            <span>HOOSHiKO AI • GLOBAL INTELLIGENCE ONLINE</span>
+        </div>
+
+        <div class="top-links">
+            <span>200+ Countries</span>
+            <span>Global Network</span>
+            <span>Live Events</span>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+    <a href="#" class="brand">
+
+        <div class="logo-box">
+
+            <!-- اگر لوگو داری این مسیر را نگه دار -->
+            <img
+                src="assets/scocoex_logo-1.png"
+                alt="SCOCOEX Logo"
+                onerror="this.style.display='none'"
+            >
+
+        </div>
+
+        <div class="brand-text">
+            <strong>HOOSHiKO</strong>
+            <span>SCOCOEX AI PLATFORM</span>
+        </div>
+
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="#ai">هوشیکو AI</a>
+        <a href="#world">جهان</a>
+        <a href="#companies">شرکت‌ها</a>
+        <a href="#investment">سرمایه‌گذاری</a>
+        <a href="#events">رویدادها</a>
+        <a href="#knowledge">دانش</a>
+
+    </div>
+
+
+    <div class="nav-actions">
+
+        <select class="lang" onchange="changeLanguage(this.value)">
+            <option value="fa">FA</option>
+            <option value="en">EN</option>
+            <option value="ar">AR</option>
+            <option value="tr">TR</option>
+        </select>
+
+        <button class="ai-mini" onclick="openAI()">
+            ✦ Ask HOOSHiKO
+        </button>
+
+    </div>
+
+</div>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+<div class="hero-grid"></div>
+
+<div class="hero-orbit">
+    <div class="core"></div>
+</div>
+
+<div class="container">
+
+<div class="hero-content">
+
+    <div class="eyebrow">
+        ✦ SCOCOEX GLOBAL INTELLIGENCE
+    </div>
+
+    <h1>
+        Ask the<br>
+        <span>Global Mind.</span>
+    </h1>
+
+    <p>
+        هوشیکو، لایه هوشمند اکوسیستم جهانی SCOCOEX؛
+        دانش، کشورها، شرکت‌ها، سرمایه‌گذاری، رویدادها
+        و اطلاعات استراتژیک را در یک پلتفرم واحد به هم متصل می‌کند.
+    </p>
+
+    <div class="hero-buttons">
+
+        <button class="primary" onclick="openAI()">
+            🧠 از هوشیکو بپرس
+        </button>
+
+        <a href="#world" class="secondary">
+            🌍 کشف جهان
+        </a>
+
+        <a href="#events" class="secondary">
+            📅 رویدادهای جهانی
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     AI COMMAND
+========================= -->
+
+<section class="ai-command" id="ai">
+
+<div class="container">
+
+<div class="ai-card">
+
+    <div class="ai-title">
+
+        <h2>
+            🧠 از هوشیکو بپرس
+        </h2>
+
+        <span>
+            ● AI READY
+        </span>
+
+    </div>
+
+    <div
+        class="ai-input"
+        onclick="openAI()"
+    >
+        درباره SCOCOEX، یک کشور، شرکت، پروژه، سرمایه‌گذاری یا رویداد سؤال کنید...
+    </div>
+
+    <div class="ai-suggestions">
+
+        <button onclick="ask('برای عمان چه برنامه‌ای داریم؟')">
+            برای عمان چه برنامه‌ای داریم؟
+        </button>
+
+        <button onclick="ask('۵ پروژه سرمایه‌گذاری انرژی را پیدا کن')">
+            ۵ پروژه سرمایه‌گذاری انرژی
+        </button>
+
+        <button onclick="ask('تمام اسناد مربوط به ازبکستان را پیدا کن')">
+            اسناد ازبکستان
+        </button>
+
+        <button onclick="ask('مدل اقتصادی SCOCOEX را توضیح بده')">
+            مدل اقتصادی SCOCOEX
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     GLOBAL SCALE
+========================= -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">GLOBAL SCALE</div>
+    <h2>یک اکوسیستم. یک هوش.</h2>
+</div>
+
+<p>
+    هوشیکو اطلاعات پراکنده را به دانش قابل جست‌وجو،
+    تحلیل و تصمیم‌سازی تبدیل می‌کند.
+</p>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+    <div class="stat-number">200+</div>
+    <div class="stat-label">کشور و بازار جهانی</div>
+</div>
+
+<div class="stat">
+    <div class="stat-number">7K+</div>
+    <div class="stat-label">شخصیت و رهبر جهانی</div>
+</div>
+
+<div class="stat">
+    <div class="stat-number">500+</div>
+    <div class="stat-label">شرکت و برند بین‌المللی</div>
+</div>
+
+<div class="stat">
+    <div class="stat-number">12K+</div>
+    <div class="stat-label">صفحه و منبع دانشی</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     GLOBAL INTELLIGENCE
+========================= -->
+
+<section class="section" id="world">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">GLOBAL INTELLIGENCE</div>
+    <h2>جهان را کشف کنید</h2>
+</div>
+
+<p>
+    کشورها، اقتصادها، شرکت‌ها، سرمایه‌گذاران،
+    پروژه‌ها و فرصت‌های همکاری در یک نمای جهانی.
+</p>
+
+</div>
+
+
+<div class="intelligence">
+
+<div class="map-card">
+
+    <div class="map-label m1">🇴🇲 Oman</div>
+    <div class="map-label m2">🇮🇷 Iran</div>
+    <div class="map-label m3">🇺🇿 Uzbekistan</div>
+    <div class="map-label m4">🇧🇬 Bulgaria</div>
+    <div class="map-label m5">🌍 Global Network</div>
+
+</div>
+
+
+<div class="intel-panel">
+
+<div class="intel-item">
+
+    <h3>🌍 Countries</h3>
+
+    <p>
+        پروفایل کشور، اقتصاد، تجارت، سرمایه‌گذاری،
+        پروژه‌ها و ارتباط آن با SCOCOEX.
+    </p>
+
+</div>
+
+
+<div class="intel-item">
+
+    <h3>🏢 Companies</h3>
+
+    <p>
+        شرکت‌های جهانی، صنایع، پروژه‌ها،
+        سرمایه‌گذاری و فرصت‌های همکاری.
+    </p>
+
+</div>
+
+
+<div class="intel-item">
+
+    <h3>💰 Investment</h3>
+
+    <p>
+        کشف پروژه‌ها، سرمایه‌گذاران، صندوق‌ها
+        و فرصت‌های سرمایه‌گذاری بین‌المللی.
+    </p>
+
+</div>
+
+
+<div class="intel-item">
+
+    <h3>🤝 Matchmaking</h3>
+
+    <p>
+        اتصال هوشمند شرکت‌ها، کشورها،
+        سرمایه‌گذاران و شرکای استراتژیک.
+    </p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     KNOWLEDGE
+========================= -->
+
+<section class="section" id="knowledge">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">KNOWLEDGE ENGINE</div>
+    <h2>دانش SCOCOEX</h2>
+</div>
+
+<p>
+    اسناد رسمی، پژوهش‌ها، قراردادها، منشورها،
+    مدل‌های اقتصادی و اطلاعات ساختاریافته.
+</p>
+
+</div>
+
+
+<div class="features">
+
+<div class="feature">
+    <div class="feature-icon">📚</div>
+    <h3>Official Knowledge</h3>
+    <p>
+        دانش رسمی و تأییدشده SCOCOEX.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">📄</div>
+    <h3>Documents</h3>
+    <p>
+        PDF، Word، گزارش‌ها، قراردادها و اسناد.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">🔎</div>
+    <h3>Smart Search</h3>
+    <p>
+        جست‌وجوی مفهومی در کل پایگاه دانش.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">📊</div>
+    <h3>Analysis</h3>
+    <p>
+        تبدیل اطلاعات به تحلیل و نمودار.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">🧩</div>
+    <h3>Knowledge Graph</h3>
+    <p>
+        اتصال کشورها، شرکت‌ها، پروژه‌ها و اسناد.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">✦</div>
+    <h3>AI Reasoning</h3>
+    <p>
+        پاسخ، تحلیل و پیشنهاد مبتنی بر دانش SCOCOEX.
+    </p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     LIVE SUMMIT
+========================= -->
+
+<section class="section live" id="events">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">LIVE GLOBAL SUMMIT</div>
+    <h2>رویداد را زنده تجربه کنید</h2>
+</div>
+
+<p>
+    نشست‌ها، سخنرانی‌ها و رویدادهای SCOCOEX
+    می‌توانند به‌صورت زنده در پلتفرم نمایش داده شوند.
+</p>
+
+</div>
+
+
+<div class="live-grid">
+
+<div class="video">
+
+    <div class="live-badge">
+        <span class="live-dot"></span>
+        LIVE
+    </div>
+
+    <div
+        class="play"
+        onclick="startLive()"
+    >
+        ▶
+    </div>
+
+    <div class="video-info">
+
+        <h3>
+            SCOCOEX Global Summit
+        </h3>
+
+        <p>
+            Live Broadcast • Global Stage
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="live-side">
+
+    <h3>
+        برنامه امروز
+    </h3>
+
+    <div class="schedule">
+
+        <div class="event">
+            <div class="time">09:00</div>
+            <div>
+                <strong>Opening Ceremony</strong>
+                <span>Global Main Stage</span>
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="time">11:00</div>
+            <div>
+                <strong>Global Investment Forum</strong>
+                <span>Investment Hall</span>
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="time">13:30</div>
+            <div>
+                <strong>Future Technology</strong>
+                <span>Technology Stage</span>
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="time">16:00</div>
+            <div>
+                <strong>Global Business Dialogue</strong>
+                <span>Diplomacy Hall</span>
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="time">19:00</div>
+            <div>
+                <strong>Closing & Agreements</strong>
+                <span>Global Main Stage</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     INTERNATIONAL COMPANIES
+========================= -->
+
+<section class="section" id="companies">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">GLOBAL NETWORK</div>
+    <h2>شرکت‌های بین‌المللی</h2>
+</div>
+
+<p>
+    شبکه‌ای از شرکت‌ها و برندهای جهانی
+    برای ارتباط، همکاری و سرمایه‌گذاری.
+</p>
+
+</div>
+
+
+<div class="cards">
+
+<div class="entity">
+    <div class="entity-top">
+        <div class="entity-logo">◉</div>
+        <span class="entity-tag">ENERGY</span>
+    </div>
+    <h3>Aramco</h3>
+    <p>Saudi Arabia • Energy</p>
+</div>
+
+<div class="entity">
+    <div class="entity-top">
+        <div class="entity-logo">◈</div>
+        <span class="entity-tag">TECH</span>
+    </div>
+    <h3>Microsoft</h3>
+    <p>Global • Technology</p>
+</div>
+
+<div class="entity">
+    <div class="entity-top">
+        <div class="entity-logo">N</div>
+        <span class="entity-tag">AI</span>
+    </div>
+    <h3>NVIDIA</h3>
+    <p>USA • Artificial Intelligence</p>
+</div>
+
+<div class="entity">
+    <div class="entity-top">
+        <div class="entity-logo">S</div>
+        <span class="entity-tag">TECH</span>
+    </div>
+    <h3>Samsung</h3>
+    <p>South Korea • Technology</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     KEY IRANIAN COMPANIES
+========================= -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="key-partners">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">STRATEGIC IRANIAN ECOSYSTEM</div>
+    <h2>شرکای کلیدی ایران</h2>
+</div>
+
+<p>
+    سه مجموعه کلیدی که در نسخه نمایشی
+    می‌توانند به‌عنوان شرکای استراتژیک برجسته شوند.
+</p>
+
+</div>
+
+
+<div class="partner-grid">
+
+<div class="partner">
+    <small>01 • STRATEGIC PARTNER</small>
+    <h3>گروه صنعتی گلرنگ</h3>
+    <p>
+        ظرفیت همکاری در حوزه صنعت، سرمایه‌گذاری،
+        تجارت، برند و توسعه بازارهای بین‌المللی.
+    </p>
+</div>
+
+<div class="partner">
+    <small>02 • STRATEGIC PARTNER</small>
+    <h3>بنیاد مستضعفان</h3>
+    <p>
+        ظرفیت همکاری در پروژه‌های اقتصادی،
+        زیرساختی، سرمایه‌گذاری و توسعه.
+    </p>
+</div>
+
+<div class="partner">
+    <small>03 • STRATEGIC PARTNER</small>
+    <h3>صنایع مس ایران</h3>
+    <p>
+        ظرفیت همکاری در معدن، انرژی،
+        صنایع معدنی، صادرات و سرمایه‌گذاری.
+    </p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     INVESTMENT
+========================= -->
+
+<section class="section" id="investment">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">INVESTMENT INTELLIGENCE</div>
+    <h2>سرمایه‌گذاری هوشمند</h2>
+</div>
+
+<p>
+    سرمایه‌گذار هدف خود را مشخص می‌کند
+    و هوشیکو پروژه‌ها و فرصت‌های مرتبط را پیشنهاد می‌دهد.
+</p>
+
+</div>
+
+
+<div class="features">
+
+<div class="feature">
+    <div class="feature-icon">💰</div>
+    <h3>Investment Projects</h3>
+    <p>
+        پروژه‌های منتخب در صنایع و کشورهای مختلف.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">🏦</div>
+    <h3>Investors</h3>
+    <p>
+        صندوق‌ها، بانک‌ها، Family Office و سرمایه‌گذاران.
+    </p>
+</div>
+
+<div class="feature">
+    <div class="feature-icon">🎯</div>
+    <h3>Smart Matching</h3>
+    <p>
+        تطبیق سرمایه‌گذار با پروژه مناسب.
+    </p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     AI QUESTIONS
+========================= -->
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+    <div class="section-kicker">ASK HOOSHiKO</div>
+    <h2>هر چیزی را بپرسید</h2>
+</div>
+
+<p>
+    کاربر لازم نیست بداند پاسخ در کدام منو قرار دارد.
+    فقط سؤال خود را مطرح می‌کند.
+</p>
+
+</div>
+
+
+<div class="questions">
+
+<div
+    class="question"
+    onclick="ask('برای عمان چه برنامه‌ای داریم؟')"
+>
+    <span>COUNTRY STRATEGY</span>
+    <p>
+        «برای عمان چه برنامه‌ای داریم؟»
+    </p>
+</div>
+
+
+<div
+    class="question"
+    onclick="ask('مدل اقتصادی SCOCOEX را توضیح بده')"
+>
+    <span>SCOCOEX KNOWLEDGE</span>
+    <p>
+        «مدل اقتصادی اسکوکواکس را توضیح بده.»
+    </p>
+</div>
+
+
+<div
+    class="question"
+    onclick="ask('تمام اسناد مربوط به ازبکستان را پیدا کن')"
+>
+    <span>DOCUMENT SEARCH</span>
+    <p>
+        «تمام اسناد مربوط به ازبکستان را پیدا کن.»
+    </p>
+</div>
+
+
+<div
+    class="question"
+    onclick="ask('برای یک شرکت فولادی پیشنهاد همکاری بنویس')"
+>
+    <span>BUSINESS</span>
+    <p>
+        «برای یک شرکت فولادی پیشنهاد همکاری با اسکوکواکس بنویس.»
+    </p>
+</div>
+
+
+<div
+    class="question"
+    onclick="ask('۵ پروژه سرمایه گذاری مرتبط با انرژی پیدا کن')"
+>
+    <span>INVESTMENT</span>
+    <p>
+        «۵ پروژه سرمایه‌گذاری مرتبط با انرژی را پیدا کن.»
+    </p>
+</div>
+
+
+<div
+    class="question"
+    onclick="ask('تفاوت نشست بانکداران و سرمایه گذاران چیست؟')"
+>
+    <span>EVENT INTELLIGENCE</span>
+    <p>
+        «تفاوت نشست بانکداران و نشست سرمایه‌گذاران چیست؟»
+    </p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+<div class="container">
+
+<div class="footer-grid">
+
+<div class="footer-brand">
+
+    <div class="brand">
+
+        <div class="logo-box">
+            <img
+                src="assets/scocoex_logo-1.png"
+                alt="SCOCOEX"
+                onerror="this.style.display='none'"
+            >
+        </div>
+
+        <div class="brand-text">
+            <strong>HOOSHiKO</strong>
+            <span>SCOCOEX AI</span>
+        </div>
+
+    </div>
+
+    <p>
+        The Intelligent Global Knowledge & Business Platform
+        powered by SCOCOEX.
+    </p>
+
+</div>
+
+
+<div>
+
+<h4>EXPLORE</h4>
+
+<ul>
+    <li><a href="#world">Countries</a></li>
+    <li><a href="#companies">Companies</a></li>
+    <li><a href="#investment">Investment</a></li>
+    <li><a href="#events">Events</a></li>
+</ul>
+
+</div>
+
+
+<div>
+
+<h4>INTELLIGENCE</h4>
+
+<ul>
+    <li>AI Assistant</li>
+    <li>Knowledge Base</li>
+    <li>Smart Search</li>
+    <li>Analysis</li>
+</ul>
+
+</div>
+
+
+<div>
+
+<h4>SCOCOEX</h4>
+
+<ul>
+    <li>About</li>
+    <li>Global Network</li>
+    <li>Partners</li>
+    <li>Contact</li>
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="copyright">
+
+© 2026 SCOCOEX • HOOSHiKO AI • Global Intelligence Platform
+
+</div>
+
+</div>
+
+</footer>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+function openAI(){
+
+    alert(
+        "HOOSHiKO AI\n\n" +
+        "در نسخه متصل به Streamlit / API، " +
+        "این بخش به موتور هوش مصنوعی و Knowledge Base متصل خواهد شد."
+    );
+
+}
+
+
+function ask(question){
+
+    alert(
+        "HOOSHiKO AI\n\n" +
+        "سؤال شما:\n" +
+        question +
+        "\n\n" +
+        "در نسخه نهایی، پاسخ از Knowledge Base اسناد SCOCOEX استخراج خواهد شد."
+    );
+
+}
+
+
+function startLive(){
+
+    alert(
+        "LIVE VIDEO\n\n" +
+        "در نسخه نهایی این قسمت می‌تواند به پخش زنده اجلاس، " +
+        "YouTube Live، RTMP یا سرویس ویدئویی اختصاصی متصل شود."
+    );
+
+}
+
+
+function changeLanguage(lang){
+
+    if(lang === "en"){
+        alert("English interface will be activated in the multilingual version.");
+    }
+
+    else if(lang === "ar"){
+        alert("واجهة اللغة العربية ستكون متاحة في النسخة متعددة اللغات.");
+    }
+
+    else if(lang === "tr"){
+        alert("Türkçe arayüz çok dilli sürümde aktif olacaktır.");
+    }
+
+    else{
+        alert("زبان فارسی فعال است.");
+    }
+
+}
+
+</script>
+
+</body>
+  </html>
