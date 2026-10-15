@@ -2,6 +2,7 @@ import os
 import re
 import json
 import html
+import textwrap
 import urllib.request
 from pathlib import Path
 from collections import Counter
@@ -34,6 +35,32 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# ============================================================
+# OPTIONAL PRIVATE DEMO ACCESS GATE
+# Add DEMO_PASSWORD to Streamlit Secrets to enable this gate.
+# This is a basic demo gate, not enterprise-grade authentication.
+# ============================================================
+
+try:
+    DEMO_PASSWORD = st.secrets.get("DEMO_PASSWORD", "")
+except Exception:
+    DEMO_PASSWORD = ""
+
+if DEMO_PASSWORD:
+    if not st.session_state.get("demo_authenticated", False):
+        st.title("SCOCOEX NEXUS")
+        st.caption("Private demonstration | Authorized access only")
+        entered_password = st.text_input(
+            "Demo access code", type="password", key="demo_access_input"
+        )
+        if st.button("Enter demo", type="primary"):
+            if entered_password == DEMO_PASSWORD:
+                st.session_state["demo_authenticated"] = True
+                st.rerun()
+            else:
+                st.error("Invalid access code.")
+        st.stop()
 
 ROOT = Path(__file__).resolve().parent
 DOCS_DIR = ROOT / "docs"
@@ -475,7 +502,7 @@ def tokenize(text):
     )
 
 
-def retrieve_chunks(question, chunks, top_k=7):
+def retrieve_chunks(question, chunks, top_k=5):
     q_tokens = set(tokenize(question))
     if not q_tokens:
         return []
@@ -619,7 +646,7 @@ When useful, mention the source document name.
                 {"role": "user", "content": user.strip()},
             ],
             temperature=0.15,
-            max_tokens=1800,
+            max_tokens=900,
         )
         return response.choices[0].message.content.strip(), None
     except Exception as exc:
@@ -693,6 +720,11 @@ st.sidebar.divider()
 st.sidebar.caption(f"{t('documents')}: {len(documents)}")
 st.sidebar.caption(f"{t('international_companies')}: {len(companies)}")
 st.sidebar.caption("SCOCOEX NEXUS • v3.0")
+st.sidebar.divider()
+st.sidebar.caption("Designed & Developed by Vista Kaviani")
+st.sidebar.caption("© 2026 Vista Kaviani")
+st.sidebar.caption("Confidential demonstration | Evaluation only")
+st.sidebar.caption("No commercial license is granted.")
 
 # ============================================================
 # HOME
@@ -823,7 +855,7 @@ elif page == t("info"):
                     with st.spinner(t("generating")):
                         summary, error = ask_groq(
                             question="",
-                            context=full_text[:24000],
+                            context=full_text[:16000],
                             mode="summary",
                         )
 
@@ -885,7 +917,7 @@ elif page == t("assistant"):
             st.warning(t("no_results"))
         else:
             with st.spinner(t("searching")):
-                relevant = retrieve_chunks(question, chunks, top_k=7)
+                relevant = retrieve_chunks(question, chunks, top_k=5)
 
             if not relevant:
                 st.warning(t("no_results"))
@@ -902,6 +934,7 @@ elif page == t("assistant"):
                     )
 
                 context = "\n\n---\n\n".join(context_parts)
+                context = context[:18000]
 
                 with st.spinner(t("generating")):
                     answer, error = ask_groq(question, context, mode="qa")
@@ -1130,6 +1163,8 @@ elif page == t("about"):
         <div class="feature-card" dir="{direction()}">
             <h3>SCOCOEX NEXUS</h3>
             <p>{esc(t("hero_text"))}</p>
+            <p><strong>Designed &amp; Developed by Vista Kaviani</strong></p>
+            <p>© 2026 Vista Kaviani. Confidential demonstration; evaluation only.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -1177,4 +1212,11 @@ elif page == t("contact"):
         )
 
         if submitted:
-            st.success(t("received"))
+            st.info(
+                "Demo form only: this version does not transmit or store your inquiry. "
+                "Please contact the platform developer directly for follow-up."
+            )
+
+    st.divider()
+    st.caption("SCOCOEX NEXUS was designed and developed by Vista Kaviani.")
+    st.caption("© 2026 Vista Kaviani | Confidential demonstration | Evaluation only.")
