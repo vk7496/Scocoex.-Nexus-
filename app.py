@@ -614,7 +614,18 @@ def ask_groq(question, context, mode="qa"):
     if client is None:
         return None, t("groq_missing")
 
-    model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    # Use a currently supported Groq model by default. You can override it
+    # in Streamlit Secrets with GROQ_MODEL if needed.
+    try:
+        configured_model = st.secrets.get("GROQ_MODEL", "")
+    except Exception:
+        configured_model = ""
+
+    model = (
+        configured_model
+        or os.getenv("GROQ_MODEL", "")
+        or "openai/gpt-oss-120b"
+    )
 
     if mode == "summary":
         system = f"""
