@@ -4,6 +4,8 @@ import json
 import html
 import textwrap
 import urllib.request
+import urllib.parse
+from html.parser import HTMLParser
 from pathlib import Path
 from collections import Counter
 
@@ -278,6 +280,36 @@ st.markdown(
 
 html, body, [class*="css"] { font-family: Inter, sans-serif; }
 
+/* High-contrast typography for dark backgrounds, including Streamlit widgets. */
+:root { color-scheme: dark; }
+[data-testid="stAppViewContainer"], [data-testid="stSidebar"] {
+    color: #F5F7FC !important;
+}
+[data-testid="stAppViewContainer"] p,
+[data-testid="stAppViewContainer"] li,
+[data-testid="stAppViewContainer"] label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stMarkdownContainer"] {
+    color: #F0F3FA;
+}
+[data-testid="stCaptionContainer"], .muted, .small-label {
+    color: #C0C9DA !important;
+}
+[data-testid="stTextArea"] textarea,
+[data-testid="stTextInput"] input,
+[data-testid="stSelectbox"] div[data-baseweb="select"] {
+    color: #172033 !important;
+    background-color: #FFFFFF !important;
+}
+[data-testid="stTextArea"] textarea::placeholder,
+[data-testid="stTextInput"] input::placeholder {
+    color: #5C6678 !important;
+    opacity: 1 !important;
+}
+[data-testid="stAlert"] p { color: #FFFFFF !important; }
+.stButton > button { font-weight: 700; }
+
 [data-testid="stAppViewContainer"] {
     background:
       radial-gradient(circle at 8% 0%, rgba(84,76,255,.16), transparent 28%),
@@ -324,13 +356,20 @@ html, body, [class*="css"] { font-family: Inter, sans-serif; }
 .metric-number { font-size:30px; font-weight:800; margin-top:8px; }
 .muted { color:#8F99AE; font-size:13px; }
 
-.answer-box {
+.answer-box { color: #F8FAFC !important; background: #172033 !important; border: 1px solid #53627A !important;
     padding:26px;
     border-radius:22px;
-    background:rgba(255,255,255,.045);
-    border:1px solid rgba(255,255,255,.08);
-    line-height:1.85;
+    background:#111827;
+    color:#F8FAFC !important;
+    border:1px solid #475569;
+    line-height:1.9;
 }
+.answer-box p, .answer-box li, .answer-box h1, .answer-box h2,
+.answer-box h3, .answer-box strong, .answer-box span {
+    color:#F8FAFC !important;
+}
+.answer-box a { color:#7DD3FC !important; text-decoration:underline; }
+
 
 .company-card-native {
     padding: 20px;
@@ -609,45 +648,43 @@ def ai_language_name():
     return st.session_state.get("language_name", "English")
 
 
-def ask_groq(question, context, mode="qa"):
+def ask_groq(question, context, mode="qa", source_mode="documents"):
+    """Call Groq. source_mode can be documents, web, or combined."""
     client = get_groq_client()
     if client is None:
         return None, t("groq_missing")
 
-    # Use a currently supported Groq model by default. You can override it
-    # in Streamlit Secrets with GROQ_MODEL if needed.
     try:
         configured_model = st.secrets.get("GROQ_MODEL", "")
     except Exception:
         configured_model = ""
-
-    model = (
-        configured_model
-        or os.getenv("GROQ_MODEL", "")
-        or "openai/gpt-oss-120b"
-    )
+    model = configured_model or os.getenv("GROQ_MODEL", "") or "openai/gpt-oss-120b"
 
     if mode == "summary":
         system = f"""
 You are the SCOCOEX NEXUS document intelligence assistant.
-Summarize ONLY the supplied source material.
-Do not invent facts.
-Write the answer in {ai_language_name()}.
-Use clear headings and concise bullet points.
-If a point is not supported by the source, do not add it.
+Summarize ONLY the supplied source material. Do not invent facts.
+Write the answer in {ai_language_name()} using clear headings and concise bullets.
 """
         user = f"Create a structured executive summary from this document:\n\n{context}"
+    elif source_mode == "documents":
+        system = f"""
+You are SCOCOEX NEXUS AI Assistant. Answer in {ai_language_name()}.
+First determine whether the supplied knowledge-base excerpts contain enough
+reliable information to answer the question. If they do, answer clearly and
+use only those excerpts. If they do not, output exactly [INSUFFICIENT_KB]
+and nothing else. Do not guess or fill gaps from general knowledge.
+"""
+        user = f"Question:\n{question}\n\nKnowledge Base excerpts:\n{context or '[No relevant excerpts found]'}"
     else:
         system = f"""
-You are SCOCOEX NEXUS AI Assistant.
-Answer ONLY from the supplied SCOCOEX Knowledge Base context.
-Do not fabricate information.
-If the context does not contain the answer, explicitly say that the current
-Knowledge Base does not provide enough information.
-Answer in {ai_language_name()}.
-When useful, mention the source document name.
+You are SCOCOEX NEXUS AI Assistant. Answer in {ai_language_name()} using the
+provided web search results. Treat search snippets as unverified leads, not
+absolute truth. Do not invent missing facts. Clearly distinguish confirmed
+information from uncertainty. Include the source URLs in a short Sources list.
+If the results do not support a reliable answer, say so explicitly.
 """
-        user = f"Question:\n{question}\n\nKnowledge Base context:\n{context}"
+        user = f"Question:\n{question}\n\nWeb search results (may be incomplete):\n{context}"
 
     try:
         response = client.chat.completions.create(
@@ -657,11 +694,107 @@ When useful, mention the source document name.
                 {"role": "user", "content": user.strip()},
             ],
             temperature=0.15,
-            max_tokens=900,
+            max_tokens=1200,
         )
         return response.choices[0].message.content.strip(), None
     except Exception as exc:
         return None, f"Groq error: {exc}"
+
+
+class _DDGParser(HTMLParser):
+    """Small built-in HTML parser for DuckDuckGo HTML result pages."""
+    def __init__(self):
+        super().__init__()
+        self.results = []
+        self._anchor = None
+        self._in_result = False
+        self._text = []
+        self._snippet = None
+        self._capture_snippet = False
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        classes = attrs.get("class", "")
+        if tag == "a" and ("result__a" in classes or "result-link" in classes):
+            self._anchor = {"url": attrs.get("href", ""), "title": ""}
+            self._text = []
+        if tag in {"a", "div", "td"} and any(c in classes for c in ("result__snippet", "result-snippet")):
+            self._capture_snippet = True
+            self._snippet = []
+
+    def handle_data(self, data):
+        if self._anchor is not None:
+            self._text.append(data)
+        if self._capture_snippet and self._snippet is not None:
+            self._snippet.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "a" and self._anchor is not None:
+            self._anchor["title"] = " ".join(" ".join(self._text).split())
+            if self._anchor["url"] and self._anchor["title"]:
+                self.results.append({**self._anchor, "snippet": ""})
+            self._anchor = None
+            self._text = []
+        if tag in {"a", "div", "td"} and self._capture_snippet:
+            snippet = " ".join(" ".join(self._snippet or []).split())
+            if snippet and self.results and not self.results[-1].get("snippet"):
+                self.results[-1]["snippet"] = snippet
+            self._capture_snippet = False
+            self._snippet = None
+
+
+def search_web(query, max_results=6):
+    """Search the public web for fallback information; returns title/url/snippet records."""
+    # Prefer a configured search API when available; otherwise try DuckDuckGo HTML.
+    try:
+        tavily_key = st.secrets.get("TAVILY_API_KEY", "")
+    except Exception:
+        tavily_key = ""
+    tavily_key = tavily_key or os.getenv("TAVILY_API_KEY", "")
+    if tavily_key:
+        try:
+            payload = json.dumps({"api_key": tavily_key, "query": query, "max_results": max_results,
+                                  "search_depth": "basic", "include_answer": False}).encode("utf-8")
+            req = urllib.request.Request("https://api.tavily.com/search", data=payload,
+                                         headers={"Content-Type": "application/json", "User-Agent": "SCOCOEX-NEXUS/1.0"})
+            with urllib.request.urlopen(req, timeout=15) as response:
+                data = json.loads(response.read().decode("utf-8"))
+            return [{"title": x.get("title", "Untitled"), "url": x.get("url", ""),
+                     "snippet": x.get("content", "")} for x in data.get("results", [])[:max_results]]
+        except Exception:
+            pass
+
+    try:
+        url = "https://html.duckduckgo.com/html/?" + urllib.parse.urlencode({"q": query})
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SCOCOEXNEXUS/1.0)"})
+        with urllib.request.urlopen(req, timeout=12) as response:
+            page = response.read().decode("utf-8", errors="replace")
+        parser = _DDGParser()
+        parser.feed(page)
+        # Normalize DuckDuckGo redirect URLs and discard duplicate links.
+        clean, seen = [], set()
+        for item in parser.results:
+            target = item["url"]
+            if target.startswith("//"):
+                target = "https:" + target
+            if "duckduckgo.com/l/?" in target:
+                params = urllib.parse.parse_qs(urllib.parse.urlparse(target).query)
+                target = params.get("uddg", [target])[0]
+            if target.startswith("http") and target not in seen:
+                seen.add(target)
+                clean.append({**item, "url": target})
+            if len(clean) >= max_results:
+                break
+        return clean
+    except Exception:
+        return []
+
+
+def format_web_results(results):
+    parts = []
+    for i, item in enumerate(results, start=1):
+        parts.append(f"[{i}] {item.get('title', 'Untitled')}\nURL: {item.get('url', '')}\nSnippet: {item.get('snippet', '')}")
+    return "\n\n".join(parts)
 
 
 def create_pdf(text, title="SCOCOEX AI Answer"):
@@ -709,10 +842,20 @@ except Exception as exc:
 # SIDEBAR NAVIGATION
 # ============================================================
 
+trade_page_labels = {
+    "en": "Trade & B2B Meetings",
+    "fa": "تجارت و جلسات B2B",
+    "ar": "التجارة واجتماعات B2B",
+    "zh": "贸易与 B2B 会议",
+    "ru": "Торговля и B2B-встречи",
+}
+trade_page = trade_page_labels.get(st.session_state.get("lang_code", "en"), "Trade & B2B Meetings")
+
 pages = [
     t("home"),
     t("info"),
     t("assistant"),
+    trade_page,
     t("companies"),
     t("intel"),
     t("gallery"),
@@ -930,63 +1073,169 @@ elif page == t("assistant"):
             with st.spinner(t("searching")):
                 relevant = retrieve_chunks(question, chunks, top_k=5)
 
-            if not relevant:
-                st.warning(t("no_results"))
-            else:
-                context_parts = []
-                for item in relevant:
-                    page_info = (
-                        f", page {item['page']}"
-                        if item.get("page") else ""
-                    )
-                    context_parts.append(
-                        f"SOURCE: {item['document']}{page_info}\n"
-                        f"{item['text']}"
-                    )
+            context_parts = []
+            for item in relevant:
+                page_info = f", page {item['page']}" if item.get("page") else ""
+                context_parts.append(f"SOURCE: {item['document']}{page_info}\n{item['text']}")
+            document_context = "\n\n---\n\n".join(context_parts)[:18000]
 
-                context = "\n\n---\n\n".join(context_parts)
-                context = context[:18000]
+            with st.spinner(t("generating")):
+                answer, error = ask_groq(question, document_context, mode="qa", source_mode="documents")
 
-                with st.spinner(t("generating")):
-                    answer, error = ask_groq(question, context, mode="qa")
+            used_web = False
+            web_results = []
+            # Fallback to web search when no relevant PDF/DOCX passages exist or the model
+            # explicitly reports that the knowledge base is insufficient.
+            if not error and (not relevant or answer == "[INSUFFICIENT_KB]"):
+                with st.spinner("Not found in SCOCOEX documents — searching the web…"):
+                    web_results = search_web(question, max_results=6)
+                    if web_results:
+                        web_context = format_web_results(web_results)
+                        answer, error = ask_groq(question, web_context, mode="qa", source_mode="web")
+                        used_web = not bool(error)
+                    else:
+                        answer = "I could not find a reliable answer in the SCOCOEX documents, and the web search did not return usable results. Please try rephrasing the question or verify it using trusted sources."
 
-                if error:
-                    st.error(error)
-                elif answer:
-                    st.markdown(
-                        f'<div class="answer-box" dir="{direction()}">',
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(answer)
-                    st.markdown("</div>", unsafe_allow_html=True)
+            if error:
+                st.error(error)
+            elif answer:
+                if answer == "[INSUFFICIENT_KB]":
+                    answer = "The SCOCOEX Knowledge Base does not contain enough information to answer this question."
+                st.markdown(
+                    f'<div class="answer-box" dir="{direction()}">',
+                    unsafe_allow_html=True,
+                )
+                st.markdown(answer)
+                st.markdown("</div>", unsafe_allow_html=True)
 
+                if used_web:
+                    st.caption("🌐 Answer generated from public web search results because the SCOCOEX documents did not contain enough information. Please verify important facts at the linked sources.")
+                    st.markdown("### Web sources")
+                    for item in web_results:
+                        title = esc(item.get("title", "Source"))
+                        url = item.get("url", "")
+                        snippet = esc(item.get("snippet", ""))
+                        st.markdown(f'**[{title}]({url})**\n\n{snippet}')
+                elif relevant:
                     st.markdown(f"### {t('sources')}")
-
                     seen = set()
                     for item in relevant:
                         key = (item["document"], item.get("page"))
                         if key in seen:
                             continue
                         seen.add(key)
-
-                        page_text = (
-                            f" — page {item['page']}"
-                            if item.get("page") else ""
-                        )
+                        page_text = f" — page {item['page']}" if item.get("page") else ""
                         st.info(f"📄 {item['document']}{page_text}")
 
-                    pdf_data = create_pdf(
-                        answer,
-                        "SCOCOEX NEXUS — AI Assistant",
+                pdf_data = create_pdf(
+                    answer,
+                    "SCOCOEX NEXUS — AI Assistant",
+                )
+                if pdf_data:
+                    st.download_button(
+                        t("download_pdf"),
+                        data=pdf_data,
+                        file_name="scocoex_ai_answer.pdf",
+                        mime="application/pdf",
+                        key="download_ai_answer",
                     )
-                    if pdf_data:
-                        st.download_button(
-                            t("download_pdf"),
-                            data=pdf_data,
-                            file_name="scocoex_ai_answer.pdf",
-                            mime="application/pdf",
-                            key="download_ai_answer",
-                        )
+
+# ============================================================
+# TRADE DISCOVERY & B2B MEETING WORKSPACE
+# ============================================================
+
+elif page == trade_page:
+    is_fa = st.session_state.get("lang_code") == "fa"
+    is_ar = st.session_state.get("lang_code") == "ar"
+    rtl = is_fa or is_ar
+    labels = {
+        "title": "مرکز کشف فرصت‌های تجاری و جلسات B2B" if is_fa else ("مركز اكتشاف الفرص التجارية واجتماعات B2B" if is_ar else "Trade Discovery & B2B Meeting Workspace"),
+        "intro": "برای یافتن خریدار یا تأمین‌کننده، مشخصات کالا و بازار هدف را وارد کنید. نتایج وب سرنخ اولیه هستند و باید مستقلاً تأیید شوند." if is_fa else ("أدخل تفاصيل المنتج والسوق المستهدف للبحث عن مشترين أو موردين. نتائج الويب مؤشرات أولية ويجب التحقق منها بشكل مستقل." if is_ar else "Find potential buyers or suppliers by searching public web sources. Results are leads, not verified business relationships; confirm every lead independently."),
+        "tab1": "یافتن تأمین‌کننده" if is_fa else ("البحث عن موردين" if is_ar else "Find Suppliers"),
+        "tab2": "یافتن خریدار" if is_fa else ("البحث عن مشترين" if is_ar else "Find Buyers"),
+        "tab3": "برنامه‌ریزی جلسه B2B" if is_fa else ("تخطيط اجتماع B2B" if is_ar else "Plan a B2B Meeting"),
+        "product": "نام کالا / محصول" if is_fa else ("اسم المنتج / السلعة" if is_ar else "Product / commodity"),
+        "specs": "مشخصات، استاندارد یا گرید" if is_fa else ("المواصفات أو المعيار أو الدرجة" if is_ar else "Specifications, grade or standard"),
+        "origin": "کشور مبدأ / محل تأمین" if is_fa else ("بلد المنشأ / موقع التوريد" if is_ar else "Origin / sourcing location"),
+        "target": "کشور یا بازار هدف" if is_fa else ("الدولة أو السوق المستهدف" if is_ar else "Target country or market"),
+        "quantity": "مقدار و واحد" if is_fa else ("الكمية والوحدة" if is_ar else "Quantity and unit"),
+        "search": "جستجوی سرنخ‌های تجاری" if is_fa else ("البحث عن فرص تجارية" if is_ar else "Search trade leads"),
+        "buyer_desc": "نوع خریدار یا صنعت موردنظر" if is_fa else ("نوع المشتري أو القطاع المطلوب" if is_ar else "Buyer type or target industry"),
+        "supplier_desc": "نوع تأمین‌کننده یا صنعت موردنظر" if is_fa else ("نوع المورد أو القطاع المطلوب" if is_ar else "Supplier type or target industry"),
+        "meeting_title": "عنوان جلسه" if is_fa else ("عنوان الاجتماع" if is_ar else "Meeting title"),
+        "participants": "طرف‌های جلسه / شرکت‌ها" if is_fa else ("الأطراف / الشركات المشاركة" if is_ar else "Meeting parties / companies"),
+        "objective": "هدف و نتیجه مطلوب جلسه" if is_fa else ("هدف الاجتماع والنتيجة المطلوبة" if is_ar else "Meeting objective and desired outcome"),
+        "duration": "مدت جلسه (دقیقه)" if is_fa else ("مدة الاجتماع (دقيقة)" if is_ar else "Meeting duration (minutes)"),
+        "agenda": "ساخت دستور جلسه" if is_fa else ("إنشاء جدول أعمال" if is_ar else "Generate meeting agenda"),
+        "notice": "این ابزار به‌تنهایی تماس نمی‌گیرد، قرار را رزرو نمی‌کند و هویت یا اعتبار شرکت‌ها را تأیید نمی‌کند. برای هماهنگی واقعی جلسه باید با طرف‌ها تماس بگیرید یا سامانه تقویم/CRM متصل شود." if is_fa else ("لا تتصل هذه الأداة بالأطراف ولا تحجز موعداً ولا تتحقق من هوية الشركات. يجب التواصل معهم مباشرة أو ربط نظام تقويم/CRM للتنسيق الفعلي." if is_ar else "This demo does not contact companies, book calendar slots, or verify company identity. Actual scheduling requires contacting participants or integrating a calendar/CRM."),
+    }
+    st.markdown(f'<div class="section-title" dir="{"rtl" if rtl else "ltr"}">{esc(labels["title"])}</div>', unsafe_allow_html=True)
+    st.write(labels["intro"])
+    supplier_tab, buyer_tab, meeting_tab = st.tabs([labels["tab1"], labels["tab2"], labels["tab3"]])
+
+    def render_trade_search(search_type):
+        with st.form(f"trade_search_form_{search_type}"):
+            product = st.text_input(labels["product"], key=f"trade_product_{search_type}")
+            specs = st.text_input(labels["specs"], key=f"trade_specs_{search_type}")
+            c1, c2 = st.columns(2)
+            with c1:
+                origin = st.text_input(labels["origin"], key=f"trade_origin_{search_type}")
+            with c2:
+                target = st.text_input(labels["target"], key=f"trade_target_{search_type}")
+            quantity = st.text_input(labels["quantity"], key=f"trade_quantity_{search_type}")
+            extra_label = labels["supplier_desc"] if search_type == "supplier" else labels["buyer_desc"]
+            extra = st.text_input(extra_label, key=f"trade_extra_{search_type}")
+            submitted = st.form_submit_button(labels["search"], type="primary", use_container_width=True)
+        if submitted:
+            if not product.strip() or not target.strip():
+                st.warning(("لطفاً نام کالا و بازار هدف را وارد کنید." if is_fa else "يرجى إدخال المنتج والسوق المستهدف." if is_ar else "Please enter a product and target market."))
+                return
+            role = "suppliers/manufacturers/exporters/wholesalers" if search_type == "supplier" else "buyers/importers/distributors/industrial purchasers"
+            query_parts = [role, product, specs, extra, f"target market {target}", f"origin {origin}" if origin else "", f"quantity {quantity}" if quantity else "", "company official website contact procurement sales"]
+            query = " ".join(x for x in query_parts if x)
+            with st.spinner("در حال جستجو در وب..." if is_fa else "جارٍ البحث في الويب..." if is_ar else "Searching public web sources..."):
+                results = search_web(query, max_results=8)
+            if not results:
+                st.warning("جستجوی وب نتیجه قابل استفاده‌ای نداد. بعداً دوباره امتحان کنید یا TAVILY_API_KEY را در Streamlit Secrets تنظیم کنید." if is_fa else "لم يُرجع البحث نتائج قابلة للاستخدام." if is_ar else "No usable public-web results were returned. Try again later or configure TAVILY_API_KEY in Streamlit Secrets.")
+            else:
+                st.success(("سرنخ‌های اولیه پیدا شدند؛ هنوز تأیید نشده‌اند." if is_fa else "تم العثور على مؤشرات أولية؛ لم يتم التحقق منها." if is_ar else "Potential leads found — these are not yet verified."))
+                for i, item in enumerate(results, start=1):
+                    title = item.get("title") or "Untitled result"
+                    url = item.get("url", "")
+                    snippet = item.get("snippet", "")
+                    with st.container(border=True):
+                        st.markdown(f"**{i}. [{title}]({url})**")
+                        if snippet:
+                            st.write(snippet)
+                st.caption(labels["notice"])
+                st.download_button("Download leads as CSV", data=pd.DataFrame(results).to_csv(index=False).encode("utf-8-sig"), file_name=f"scocoex_{search_type}_leads.csv", mime="text/csv", key=f"download_{search_type}_leads")
+
+    with supplier_tab:
+        render_trade_search("supplier")
+    with buyer_tab:
+        render_trade_search("buyer")
+    with meeting_tab:
+        st.write("طراحی دستور جلسه، موضوعات مذاکره و اقدامات بعدی." if is_fa else ("إنشاء جدول أعمال ومحاور التفاوض والخطوات التالية." if is_ar else "Create a structured agenda, negotiation topics and follow-up actions."))
+        with st.form("b2b_meeting_planner_form"):
+            meeting_title = st.text_input(labels["meeting_title"], value="B2B Trade Partnership Meeting")
+            participants = st.text_area(labels["participants"], placeholder="Buyer, supplier, investor, company representatives...")
+            objective = st.text_area(labels["objective"], placeholder="Product, quantity, target market, commercial objective...")
+            duration = st.selectbox(labels["duration"], [15, 30, 45, 60, 90], index=2)
+            meeting_submit = st.form_submit_button(labels["agenda"], type="primary", use_container_width=True)
+        if meeting_submit:
+            if not participants.strip() or not objective.strip():
+                st.warning("طرف‌های جلسه و هدف را وارد کنید." if is_fa else "أدخل الأطراف والهدف." if is_ar else "Please enter participants and the meeting objective.")
+            else:
+                prompt = f"Create a practical B2B meeting agenda in {ai_language_name()}. Do not invent company facts. Include time allocations totaling exactly {duration} minutes, introductions, commercial requirements, product/specification discussion, pricing and Incoterms if relevant, logistics/payment/compliance questions, due diligence, decisions needed, action items with owners, and a follow-up checklist. Meeting title: {meeting_title}. Participants: {participants}. Objective/context: {objective}. Clearly mark items that must be confirmed by participants."
+                with st.spinner("در حال آماده‌سازی دستور جلسه..." if is_fa else "جارٍ إعداد جدول الأعمال..." if is_ar else "Preparing meeting agenda..."):
+                    agenda, agenda_error = ask_groq(prompt, "No external company facts supplied. Build only a proposed agenda from user-provided details; do not add source claims.", mode="qa", source_mode="web")
+                if agenda_error:
+                    st.error(agenda_error)
+                elif agenda:
+                    st.markdown("### " + ("دستور جلسه پیشنهادی" if is_fa else "جدول الأعمال المقترح" if is_ar else "Proposed Meeting Agenda"))
+                    st.markdown(agenda)
+                    st.download_button("Download agenda (.txt)", data=agenda, file_name="scocoex_b2b_meeting_agenda.txt", mime="text/plain", key="download_b2b_agenda")
+        st.info(labels["notice"])
 
 # ============================================================
 # INTERNATIONAL COMPANIES
